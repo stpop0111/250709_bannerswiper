@@ -30,12 +30,10 @@ export default function Home() {
     // 改行でURLを分割 -> 配列にセットする
     const urlArray = inputUrls
       .split('\n')
-      .filter((url) => url.trim() === '')
+      .filter((url) => url.trim() !== '')
       .map((url) => url.trim());
 
-    setImages(
-      urlArray.length > 0 ? ['/test01.jpg', '/test02.jpg', '/test03.jpg'] : []
-    );
+    setImages(urlArray);
     setCurrentIndex(0);
     setResults([]);
     setMode('swipe');
@@ -50,7 +48,7 @@ export default function Home() {
   // マウント関係
   useEffect(() => {
     initializeDraggable();
-  }, [currentIndex]);
+  }, [currentIndex, mode]);
 
   const initializeDraggable = () => {
     Draggable.get(imageRef.current)?.kill(); // imageRefについている"Draggable"を削除
@@ -167,7 +165,7 @@ example.com`}
       {mode === 'swipe' && (
         <div className='bg-white rounded-lg shadow-lg p-6 max-w-md w-full'>
           {/* 戻るボタン */}
-          <div className="mb-4">
+          <div className='mb-4'>
             <button
               onClick={backToInput}
               className='text-gray-800 bg-gray-400 hover:bg-gray-700 hover:text-gray-400 py-4 px-3 rounded-lg transition-colors'
@@ -209,17 +207,6 @@ example.com`}
             </div>
           </div>
 
-          {/* 結果表示 */}
-          {results.length > 0 && (
-            <div className='mt-6 p-4 bg-white rounded-lg shadow max-w-md w-full'>
-              <h3 className='font-bold mb-2'>結果：</h3>
-              {results.map((result, index) => (
-                <div className='text-sm' key={index}>
-                  {result.image} : {result.choice}
-                </div>
-              ))}
-            </div>
-          )}
         </div>
       )}
     </div>
