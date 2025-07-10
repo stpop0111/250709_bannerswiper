@@ -139,9 +139,6 @@ export default function Home() {
           </h2>
 
           <div className='mb-4'>
-            <label className='block text-sm font-medium text-gray-700 mb-2'>
-              参考にしたいURL
-            </label>
             <textarea
               value={inputUrls}
               onChange={(e) => setInputUrls(e.target.value)}
@@ -160,11 +157,6 @@ example.com`}
       {mode === 'swipe' && (
         <div className='bg-white rounded-lg shadow-lg p-6 max-w-md w-full'>
           {/* 戻るボタン */}
-          <div className='mb-4'>
-            <Button onClick={backToInput} variant='optional'>
-              入力に戻る
-            </Button>
-          </div>
           {/* 画像表示エリア */}
           <div className='mb-6'>
             <img
@@ -178,8 +170,8 @@ example.com`}
 
           {/* 進捗表示 */}
           <div className='text-center mb-4'>
-            <p className='text-gray-600'>
-              {currentIndex + 1} / {images.length}
+            <p className='text-gray-600 mb-2'>
+              <span className='text-xl'>{currentIndex + 1}</span> / <span className='text-red-400'>{images.length}</span>
             </p>
 
             {/* ボタン */}
@@ -195,6 +187,13 @@ example.com`}
                 variant='like'
               >
                 ❤
+              </Button>
+            </div>
+
+            {/* 入力に戻る */}
+            <div className='mt-4'>
+              <Button onClick={backToInput} variant='optional'>
+                入力に戻る
               </Button>
             </div>
           </div>
