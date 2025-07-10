@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { Draggable } from 'gsap/Draggable';
+import Button from './components/common/Button';
 
 gsap.registerPlugin(Draggable);
 
@@ -63,7 +64,6 @@ export default function Home() {
         const progress = Math.abs(x) / maxDistance;
 
         gsap.set(imageRef.current, {
-          y: 10,
           opacity: 1 - progress * 0.8,
           scale: Math.max(1 - progress * 0.8, 0.8),
           rotation: x * 0.15,
@@ -77,10 +77,10 @@ export default function Home() {
 
         if (x > threshold) {
           // 右にドラッグした時 -> 右に行く
-          animateChoice('好き!', 'right');
+          animateChoice('like', 'right');
         } else if (x < -threshold) {
           // 左にドラッグした時 -> 左に行く
-          animateChoice('良くない', 'left');
+          animateChoice('disLike', 'left');
         } else {
           //どちらでもない（中途半端）な時 -> 元に戻す
           gsap.to(imageRef.current, {
@@ -101,7 +101,7 @@ export default function Home() {
       x: direction === 'right' ? 400 : -400,
       rotation: direction === 'right' ? 30 : -30,
       opacity: 0,
-      duration: 1,
+      duration: 0.6,
       ease: 'power4.out',
       onComplete: () => {
         handleChoise(choice);
@@ -125,8 +125,7 @@ export default function Home() {
     if (currentIndex < images.length - 1) {
       setCurrentIndex(currentIndex + 1);
     } else {
-      alert('完了！結果を確認してください');
-      console.log('最終結果：', results);
+      setMode('result');
     }
   };
 
@@ -152,26 +151,19 @@ example.com`}
               className='w-full h-32 p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent'
             />
           </div>
-          <button
-            onClick={handleUrlSubmit}
-            className='w-full bg-blue-500 text-white py-3 px-6 rounded-lg font-bold hover:bg-blue-600 transition-colors'
-          >
+          <Button onClick={handleUrlSubmit} variant='primary'>
             スワイプ開始！
-          </button>
+          </Button>
         </div>
       )}
-
       {/* スワイプ画面 */}
       {mode === 'swipe' && (
         <div className='bg-white rounded-lg shadow-lg p-6 max-w-md w-full'>
           {/* 戻るボタン */}
           <div className='mb-4'>
-            <button
-              onClick={backToInput}
-              className='text-gray-800 bg-gray-400 hover:bg-gray-700 hover:text-gray-400 py-4 px-3 rounded-lg transition-colors'
-            >
+            <Button onClick={backToInput} variant='optional'>
               入力に戻る
-            </button>
+            </Button>
           </div>
           {/* 画像表示エリア */}
           <div className='mb-6'>
@@ -192,23 +184,53 @@ example.com`}
 
             {/* ボタン */}
             <div className='flex gap-3'>
-              <button
-                onClick={() => animateChoice('これじゃない', 'left')}
-                className='w-full bg-red-500 text-white py-6 px-6 rounded-lg font-bold hover:bg-red-600'
+              <Button
+                onClick={() => animateChoice('disLike', 'left')}
+                variant='dislike'
               >
-                これじゃない
-              </button>
-              <button
-                onClick={() => animateChoice('好き!', 'right')}
-                className='w-full bg-green-500 text-white py-6 px-6 rounded-lg font-bold hover:bg-green-600'
+                ✖
+              </Button>
+              <Button
+                onClick={() => animateChoice('like', 'right')}
+                variant='like'
               >
-                好き！
-              </button>
+                ❤
+              </Button>
             </div>
           </div>
+        </div>
+      )}{' '}
+      {/* //スワイプ画面 */}
+      {/* 結果画面 */}
+      {mode === 'result' && (
+        <div className='bg-white rounded-lg shadow-lg p-6 max-w-4xl w-full'>
+          <h2 className='text-2xl font-bold text-center mb-6'>選んだバナー</h2>
 
+          {/* 画像表示 */}
+          <div className='grid grid-cols-4 gap-4 mb-6'>
+            {results
+              .filter((result) => result.choice === 'like')
+              .map((result, index) => (
+                <div key={index} className='relative'>
+                  <img
+                    src={result.image}
+                    alt={`好きな画像 ${index + 1}`}
+                    className='w-full object-cover'
+                  />
+                  <span className='absolute top-2 right-2 px-2 py-1 rounded text-sm'>
+                    💖
+                  </span>
+                </div>
+              ))}
+          </div>
+          <div className='mt-4'>
+            <Button onClick={backToInput} variant='optional'>
+              入力に戻る
+            </Button>
+          </div>
         </div>
       )}
+      {/* //結果画面 */}
     </div>
   );
 }
