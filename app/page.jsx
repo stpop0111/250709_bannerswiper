@@ -4,6 +4,9 @@ import { useState, useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { Draggable } from 'gsap/Draggable';
 import Button from './components/common/Button';
+import InputScreen from './components/screens/InputScree';
+import SwipeScreen from './components/screens/SwipeScreen';
+import ResultScreen from './components/screens/ResultScreen';
 
 gsap.registerPlugin(Draggable);
 
@@ -133,101 +136,26 @@ export default function Home() {
     <div className='min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4'>
       {/* URL入力画面 */}
       {mode === 'input' && (
-        <div className='bg-white rounded-lg shadow-lg p-6 max-w-md w-full'>
-          <h2 className='text-2xl font-bold text-center mb-6'>
-            画像URLを入力してください
-          </h2>
-
-          <div className='mb-4'>
-            <textarea
-              value={inputUrls}
-              onChange={(e) => setInputUrls(e.target.value)}
-              placeholder={`example.com
-example.com
-example.com`}
-              className='w-full h-32 p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent'
-            />
-          </div>
-          <Button onClick={handleUrlSubmit} variant='primary'>
-            スワイプ開始！
-          </Button>
-        </div>
+        <InputScreen
+          inputUrls={inputUrls}
+          setInputUrls={setInputUrls}
+          handleUrlSubmit={handleUrlSubmit}
+        />
       )}
-      {/* スワイプ画面 */}
+
       {mode === 'swipe' && (
-        <div className='bg-white rounded-lg shadow-lg p-6 max-w-md w-full'>
-          {/* 戻るボタン */}
-          {/* 画像表示エリア */}
-          <div className='mb-6'>
-            <img
-              ref={imageRef}
-              src={images[currentIndex]}
-              alt={`image ${currentIndex + 1}`}
-              className='w-full object-cover rounded-lg'
-              style={{ touchAction: 'none' }}
-            />
-          </div>
+        <SwipeScreen
+          imageRef={imageRef}
+          images={images}
+          currentIndex={currentIndex}
+          animateChoice={animateChoice}
+          backToInput={backToInput}
+        />
+      )}
 
-          {/* 進捗表示 */}
-          <div className='text-center mb-4'>
-            <p className='text-gray-600 mb-2'>
-              <span className='text-xl'>{currentIndex + 1}</span> / <span className='text-red-400'>{images.length}</span>
-            </p>
-
-            {/* ボタン */}
-            <div className='flex gap-3'>
-              <Button
-                onClick={() => animateChoice('disLike', 'left')}
-                variant='dislike'
-              >
-                ✖
-              </Button>
-              <Button
-                onClick={() => animateChoice('like', 'right')}
-                variant='like'
-              >
-                ❤
-              </Button>
-            </div>
-
-            {/* 入力に戻る */}
-            <div className='mt-4'>
-              <Button onClick={backToInput} variant='optional'>
-                入力に戻る
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}{' '}
-      {/* //スワイプ画面 */}
       {/* 結果画面 */}
       {mode === 'result' && (
-        <div className='bg-white rounded-lg shadow-lg p-6 max-w-4xl w-full'>
-          <h2 className='text-2xl font-bold text-center mb-6'>選んだバナー</h2>
-
-          {/* 画像表示 */}
-          <div className='grid grid-cols-4 gap-4 mb-6'>
-            {results
-              .filter((result) => result.choice === 'like')
-              .map((result, index) => (
-                <div key={index} className='relative'>
-                  <img
-                    src={result.image}
-                    alt={`好きな画像 ${index + 1}`}
-                    className='w-full object-cover'
-                  />
-                  <span className='absolute top-2 right-2 px-2 py-1 rounded text-sm'>
-                    💖
-                  </span>
-                </div>
-              ))}
-          </div>
-          <div className='mt-4'>
-            <Button onClick={backToInput} variant='optional'>
-              入力に戻る
-            </Button>
-          </div>
-        </div>
+        <ResultScreen results={results} backToInput={backToInput} />
       )}
       {/* //結果画面 */}
     </div>
