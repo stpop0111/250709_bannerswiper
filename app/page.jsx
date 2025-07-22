@@ -7,12 +7,14 @@ import Button from './components/common/Button';
 import InputScreen from './components/screens/InputScreen';
 import SwipeScreen from './components/screens/SwipeScreen';
 import ResultScreen from './components/screens/ResultScreen';
+import TitleScreen from './components/screens/TitleScreen';
+import LibraryScreen from './components/screens/LibraryScreen';
 
 gsap.registerPlugin(Draggable);
 
 export default function Home() {
   // 画面モードの管理
-  const [mode, setMode] = useState('input'); //画面モードの状態管理
+  const [mode, setMode] = useState('title'); //画面モードの状態管理
   const [inputUrls, setInputUrls] = useState(''); //urlの入力
   // 画像の配列
   const [images, setImages] = useState([]);
@@ -21,6 +23,7 @@ export default function Home() {
   const [results, setResults] = useState([]); // 判定結果の保存
   const imageRef = useRef(null); // 画像要素の直接参照
 
+  // 画像URLを記入時
   const handleUrlSubmit = () => {
     if (!inputUrls.trim()) {
       alert('画像URLを入力してください');
@@ -44,6 +47,10 @@ export default function Home() {
     setCurrentIndex(0);
     setResults([]);
   };
+
+  const changeScreen = (screenName) => {
+    setMode(screenName);
+  }
 
   // マウント関係
   useEffect(() => {
@@ -130,15 +137,24 @@ export default function Home() {
 
   return (
     <div className='min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4'>
+      {/* タイトル画面 */}
+      {mode === 'title' && (
+        <TitleScreen
+          changeInput={() => changeScreen('input')}
+          changeLibrary={() => changeScreen('library')}/>
+      )}
+
       {/* URL入力画面 */}
       {mode === 'input' && (
         <InputScreen
           inputUrls={inputUrls}
           setInputUrls={setInputUrls}
           handleUrlSubmit={handleUrlSubmit}
+          changeTitle={() => changeScreen('title')}
         />
       )}
 
+      {/* スワイプモード */}
       {mode === 'swipe' && (
         <SwipeScreen
           imageRef={imageRef}
@@ -153,7 +169,14 @@ export default function Home() {
       {mode === 'result' && (
         <ResultScreen results={results} backToInput={backToInput} />
       )}
-      {/* //結果画面 */}
+
+      {/* ライブラリー */}
+      {mode === 'library' && (
+        <LibraryScreen
+          changeTitle={() => changeScreen('title')}
+        />
+      )}
+
     </div>
   );
 }
