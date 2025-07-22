@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { Draggable } from 'gsap/Draggable';
 import Button from './components/common/Button';
-import InputScreen from './components/screens/InputScree';
+import InputScreen from './components/screens/InputScreen';
 import SwipeScreen from './components/screens/SwipeScreen';
 import ResultScreen from './components/screens/ResultScreen';
 
@@ -15,11 +15,7 @@ export default function Home() {
   const [mode, setMode] = useState('input'); //画面モードの状態管理
   const [inputUrls, setInputUrls] = useState(''); //urlの入力
   // 画像の配列
-  const [images, setImages] = useState([
-    '/test01.jpg',
-    '/test02.jpg',
-    '/test03.jpg',
-  ]);
+  const [images, setImages] = useState([]);
 
   const [currentIndex, setCurrentIndex] = useState(0); // 現在の画像のインデックス
   const [results, setResults] = useState([]); // 判定結果の保存
