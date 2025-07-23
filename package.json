@@ -6,7 +6,9 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint --fix",
+    "lint:check": "next lint",
+    "lint:fix": "next lint --fix"
   },
   "dependencies": {
     "gsap": "^3.13.0",
@@ -19,6 +21,8 @@
     "@tailwindcss/postcss": "^4",
     "eslint": "^9",
     "eslint-config-next": "15.3.5",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-react": "^7.37.5",
     "tailwindcss": "^4"
   }
 }

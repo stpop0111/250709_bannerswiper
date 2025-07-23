@@ -5,7 +5,7 @@ export default function SwipeScreen({
   images,
   currentIndex,
   animateChoice,
-  backToInput,
+  changeInput,
 }) {
   return (
     <>
@@ -45,7 +45,7 @@ export default function SwipeScreen({
 
           {/* 入力に戻る */}
           <div className='mt-4'>
-            <Button onClick={backToInput} variant='optional'>
+            <Button onClick={changeInput} variant='optional'>
               入力に戻る
             </Button>
           </div>

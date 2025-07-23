@@ -1,6 +1,6 @@
 import Button from '../common/Button';
 
-export default function ResultScreen({ results, backToInput }) {
+export default function ResultScreen({ results, changeInput }) {
   return (
     <div className='bg-white rounded-lg shadow-lg p-6 max-w-4xl w-full'>
       <h2 className='text-2xl font-bold text-center mb-6'>選んだバナー</h2>
@@ -23,7 +23,7 @@ export default function ResultScreen({ results, backToInput }) {
           ))}
       </div>
       <div className='mt-4'>
-        <Button onClick={backToInput} variant='optional'>
+        <Button onClick={changeInput} variant='optional'>
           入力に戻る
         </Button>
       </div>

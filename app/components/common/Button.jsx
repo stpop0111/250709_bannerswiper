@@ -14,7 +14,7 @@ export default function Button({ onClick, children, variant = 'primary' }) {
     primary: 'bg-gradient-to-tr from-blue-50 to-blue-400 text-black',
     like: 'bg-gradient-to-tr from-green-200 to-emerald-600 text-black',
     dislike: 'bg-gradient-to-tr from-red-400 to-red-100 text-black',
-    optional: 'bg-gradient-to-tr from-slate-50 to-gray-300 text-black',
+    optional: 'bg-gradient-to-tr from-slate-50 to-gray-300 text-black w-full',
   };
 
   useEffect(() => {
@@ -23,14 +23,14 @@ export default function Button({ onClick, children, variant = 'primary' }) {
 
     gsap.set(button, {
       opacity: 0,
-      scale: 0.2,
+      scale: 0.8,
     });
 
     gsap.to(button, {
       opacity: 1,
       scale: 1,
       duration: 0.8,
-      ease: 'back.out(1.7)',
+      ease: 'power4.out',
       scrollTrigger: {
         trigger: button,
         start: 'top bottom',
@@ -72,7 +72,7 @@ export default function Button({ onClick, children, variant = 'primary' }) {
     <button
     ref= {buttonRef}
       onClick={onClick}
-      className={`w-full text-lg md:text-xl py-2 px-3 md:py-4 md:px-6 rounded-lg font-bold shadow-sm hover:shadow-lg transition-shadow ${styles[variant]}`}
+      className={`text-lg md:text-xl py-2 px-3 md:py-4 md:px-6 rounded-lg font-bold shadow-sm hover:shadow-lg transition-shadow ${styles[variant]}`}
     >
       {children}
     </button>

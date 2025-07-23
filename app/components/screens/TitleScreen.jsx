@@ -5,7 +5,7 @@ export default function TitleScreen ({changeInput, changeLibrary}) {
     <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-5xl">
       {/* タイトル */}
       <div className="text-center mb-4">
-        <h1 className="text-3xl font-bold text-gray-900">Banner Swiper</h1>
+        <h1 className="text-5xl font-bold text-gray-900 mb-2">Banner Swiper</h1>
         <p className="text-lg">デザインを直感的に・楽しく・保存しよう！</p>
       </div>
 

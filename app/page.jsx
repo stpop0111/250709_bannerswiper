@@ -3,7 +3,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { Draggable } from 'gsap/Draggable';
+
 import Button from './components/common/Button';
+import FadeTransition from './components/animations/FadeTransition';
+
 import InputScreen from './components/screens/InputScreen';
 import SwipeScreen from './components/screens/SwipeScreen';
 import ResultScreen from './components/screens/ResultScreen';
@@ -16,12 +19,24 @@ export default function Home() {
   // 画面モードの管理
   const [mode, setMode] = useState('title'); //画面モードの状態管理
   const [inputUrls, setInputUrls] = useState(''); //urlの入力
-  // 画像の配列
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState([]); // 画像の配列
 
   const [currentIndex, setCurrentIndex] = useState(0); // 現在の画像のインデックス
   const [results, setResults] = useState([]); // 判定結果の保存
   const imageRef = useRef(null); // 画像要素の直接参照
+
+  // 画面の表示切替
+  const changeScreen = (screenName) => {
+
+    if (screenName !== mode) {
+      setMode(screenName);
+    }
+
+    if (mode === 'input') {
+      setCurrentIndex(0);
+      setResults([]);
+    }
+  };
 
   // 画像URLを記入時
   const handleUrlSubmit = () => {
@@ -39,24 +54,15 @@ export default function Home() {
     setImages(urlArray);
     setCurrentIndex(0);
     setResults([]);
-    setMode('swipe');
+    changeScreen('swipe');
   };
-
-  const backToInput = () => {
-    setMode('input');
-    setCurrentIndex(0);
-    setResults([]);
-  };
-
-  const changeScreen = (screenName) => {
-    setMode(screenName);
-  }
 
   // マウント関係
   useEffect(() => {
     initializeDraggable();
   }, [currentIndex, mode]);
 
+  // スワイプの処理
   const initializeDraggable = () => {
     Draggable.get(imageRef.current)?.kill(); // imageRefについている"Draggable"を削除
     Draggable.create(imageRef.current, {
@@ -102,6 +108,7 @@ export default function Home() {
     });
   };
 
+  // スワイプ後の処理
   const animateChoice = (choice, direction) => {
     gsap.to(imageRef.current, {
       x: direction === 'right' ? 400 : -400,
@@ -131,52 +138,53 @@ export default function Home() {
     if (currentIndex < images.length - 1) {
       setCurrentIndex(currentIndex + 1);
     } else {
-      setMode('result');
+      changeScreen('result');
     }
   };
 
   return (
     <div className='min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4'>
       {/* タイトル画面 */}
-      {mode === 'title' && (
-        <TitleScreen
-          changeInput={() => changeScreen('input')}
-          changeLibrary={() => changeScreen('library')}/>
-      )}
-
-      {/* URL入力画面 */}
-      {mode === 'input' && (
-        <InputScreen
-          inputUrls={inputUrls}
-          setInputUrls={setInputUrls}
-          handleUrlSubmit={handleUrlSubmit}
-          changeTitle={() => changeScreen('title')}
-        />
-      )}
-
-      {/* スワイプモード */}
-      {mode === 'swipe' && (
-        <SwipeScreen
-          imageRef={imageRef}
-          images={images}
-          currentIndex={currentIndex}
-          animateChoice={animateChoice}
-          backToInput={backToInput}
-        />
-      )}
-
-      {/* 結果画面 */}
-      {mode === 'result' && (
-        <ResultScreen results={results} backToInput={backToInput} />
-      )}
-
-      {/* ライブラリー */}
-      {mode === 'library' && (
-        <LibraryScreen
-          changeTitle={() => changeScreen('title')}
-        />
-      )}
-
+      <FadeTransition
+        animationKey={mode}
+      >
+        {mode === 'title' && (
+          <TitleScreen
+            changeInput={() => changeScreen('input')}
+            changeLibrary={() => changeScreen('library')}
+          />
+        )}
+        {/* URL入力画面 */}
+        {mode === 'input' && (
+          <InputScreen
+            inputUrls={inputUrls}
+            setInputUrls={setInputUrls}
+            handleUrlSubmit={handleUrlSubmit}
+            changeTitle={() => changeScreen('title')}
+          />
+        )}
+        {/* スワイプモード */}
+        {mode === 'swipe' && (
+          <SwipeScreen
+            imageRef={imageRef}
+            images={images}
+            currentIndex={currentIndex}
+            animateChoice={animateChoice}
+            changeInput={() => changeScreen('input')}
+          />
+        )}
+        {/* 結果画面 */}
+        {mode === 'result' && (
+          <ResultScreen
+            results={results}
+            changeInput={() => changeScreen('input')}
+          />
+        )}
+        {/* ライブラリー */}
+        {mode === 'library' && (
+          <LibraryScreen changeTitle={() => changeScreen('title')} />
+        )}
+      </FadeTransition>
     </div>
   );
 }
