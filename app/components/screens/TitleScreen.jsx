@@ -2,7 +2,7 @@ import Button from "../common/Button"
 
 export default function TitleScreen ({changeInput, changeLibrary}) {
   return(
-    <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-5xl">
+    <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-5xl m-auto">
       {/* タイトル */}
       <div className="text-center mb-4">
         <h1 className="text-5xl font-bold text-gray-900 mb-2">Banner Swiper</h1>
@@ -14,7 +14,7 @@ export default function TitleScreen ({changeInput, changeLibrary}) {
         <div className="m-auto max-w-5xl">
           <div className="bg-gray-100 rounded-lg border-2 overflow-hidden border-gray-300">
             <h3 className="text-center font-semibold text-2xl bg-gray-900 text-gray-50 p-4">使い方</h3>
-            <ul className="p-4 text-xl leading-loose">
+            <ul className="p-4 text-sm leading-loose">
               <li>雰囲気を選択して...</li>
               <li>画像のURLを入力</li>
               <li>右にスワイプ → 雰囲気に合ってる！👍</li>

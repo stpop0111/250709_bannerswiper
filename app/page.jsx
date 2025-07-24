@@ -27,7 +27,6 @@ export default function Home() {
 
   // 画面の表示切替
   const changeScreen = (screenName) => {
-
     if (screenName !== mode) {
       setMode(screenName);
     }
@@ -142,12 +141,14 @@ export default function Home() {
     }
   };
 
+  const previousImage = () => {
+    images[currentIndex - 1];
+  };
+
   return (
-    <div className='min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4'>
+    <div className='min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4 overflow-hidden'>
       {/* タイトル画面 */}
-      <FadeTransition
-        animationKey={mode}
-      >
+      <FadeTransition animationKey={mode}>
         {mode === 'title' && (
           <TitleScreen
             changeInput={() => changeScreen('input')}
@@ -171,6 +172,7 @@ export default function Home() {
             currentIndex={currentIndex}
             animateChoice={animateChoice}
             changeInput={() => changeScreen('input')}
+            previousImage={previousImage}
           />
         )}
         {/* 結果画面 */}

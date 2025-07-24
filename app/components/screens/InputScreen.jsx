@@ -7,7 +7,7 @@ export default function InputScreen({
   changeTitle,
 }) {
   return (
-    <div>
+    <div className='max-w-2xl w-full'>
       <div className='mb-6'>
         <h2 className='text-2xl font-bold text-center'>探求に行きましょう。</h2>
         <p>画像URLを入力するか、インポートする形式を選んでください。</p>
@@ -45,7 +45,7 @@ https://example.com/image3.jpg
       </div>
 
       {/* タイトルに戻るボタン */}
-      <div className='max-w-2xl m-auto'>
+      <div className='w-full'>
         <Button onClick={changeTitle} variant='optional'>
           タイトルに戻る
         </Button>

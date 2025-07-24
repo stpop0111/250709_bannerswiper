@@ -72,7 +72,7 @@ export default function Button({ onClick, children, variant = 'primary' }) {
     <button
     ref= {buttonRef}
       onClick={onClick}
-      className={`text-lg md:text-xl py-2 px-3 md:py-4 md:px-6 rounded-lg font-bold shadow-sm hover:shadow-lg transition-shadow ${styles[variant]}`}
+      className={`cursor-pointer text-lg md:text-xl py-2 px-3 md:py-4 md:px-6 rounded-lg font-bold shadow-sm hover:shadow-lg transition-shadow ${styles[variant]}`}
     >
       {children}
     </button>

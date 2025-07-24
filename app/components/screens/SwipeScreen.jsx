@@ -5,30 +5,34 @@ export default function SwipeScreen({
   images,
   currentIndex,
   animateChoice,
-  changeInput,
+  previousImage,
+  changeInput
 }) {
   return (
-    <>
-      <div className='bg-white rounded-lg shadow-lg p-6 max-w-7xl w-full h-full'>
-        {/* 画像表示エリア */}
-        <div className='h-[400px] mb-6'>
-          <img
-            ref={imageRef}
-            src={images[currentIndex]}
-            alt={`image ${currentIndex + 1}`}
-            className='h-full object-cover rounded-lg'
-            style={{ touchAction: 'none' }}
-          />
-        </div>
-        {/* 進捗表示 */}
-        <div className='text-center mb-4'>
-          <p className='text-gray-600 mb-2'>
+    <div className='w-full max-w-2xl'>
+      <div className='bg-white rounded-lg p-4'>
+        {/* 進捗 */}
+        <div className='text-center mb-2'>
+          <p className='text-gray-600 font-bold'>
             <span className='text-xl'>{currentIndex + 1}</span> /{' '}
             <span className='text-red-400'>{images.length}</span>
           </p>
-
-          {/* ボタン */}
-          <div className='flex gap-3'>
+        </div>
+        {/* 画像表示エリア */}
+        <div className='mb-6'>
+          <div className=''>
+            <img
+              ref={imageRef}
+              src={images[currentIndex]}
+              alt={`image ${currentIndex + 1}`}
+              className='h-full object-cover m-auto'
+              style={{ touchAction: 'none' }}
+            />
+          </div>
+        </div>
+        {/* ボタン */}
+        <div className='m-auto top-[100%]'>
+          <div className='flex gap-3 justify-center mb-4'>
             <Button
               onClick={() => animateChoice('disLike', 'left')}
               variant='dislike'
@@ -42,15 +46,19 @@ export default function SwipeScreen({
               ❤
             </Button>
           </div>
-
-          {/* 入力に戻る */}
-          <div className='mt-4'>
-            <Button onClick={changeInput} variant='optional'>
+          <div className='flex gap-3 justify-center mb-4'>
+            <Button
+              onClick={changeInput}
+              variant='optional'
+            >
               入力に戻る
+            </Button>
+            <Button onClick={previousImage} variant='optional'>
+              ひとつ戻る
             </Button>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
