@@ -7,73 +7,69 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function Button({ onClick, children, variant = 'primary' }) {
-  const buttonRef = useRef(null);
-
+export default function Button({
+  animation = true,
+  onClick,
+  children,
+  variant = 'primary',
+  buttonWidth = '',
+}) {
   const styles = {
-    primary: 'bg-gradient-to-tr from-blue-50 to-blue-400 text-black',
-    like: 'bg-gradient-to-tr from-green-200 to-emerald-600 text-black',
-    dislike: 'bg-gradient-to-tr from-red-400 to-red-100 text-black',
-    optional: 'bg-gradient-to-tr from-slate-50 to-gray-300 text-black w-full',
+    primary: 'bg-gradient-to-tr from-blue-50 to-blue-400 text-black', // プライマリー
+    like: 'bg-gradient-to-tr from-green-200 to-emerald-600 text-black', // いいね
+    dislike: 'bg-gradient-to-tr from-red-400 to-red-100 text-black', // ✖
+    optional: 'bg-gradient-to-tr from-slate-50 to-gray-300 text-black', // オプショナル
   };
 
-  useEffect(() => {
-    const button = buttonRef.current;
-    if (!button) return;
+  // アニメーション用のuseRef
+  const elRef = useRef(null);
 
-    gsap.set(button, {
+  // アニメーション用のuseEffect
+  useEffect(() => {
+    const element = elRef.current;
+    if (!element) return;
+
+    gsap.set(element, {
       opacity: 0,
       scale: 0.8,
     });
 
-    gsap.to(button, {
+    gsap.to(element, {
       opacity: 1,
       scale: 1,
       duration: 0.8,
       ease: 'power4.out',
       scrollTrigger: {
-        trigger: button,
+        trigger: element,
         start: 'top bottom',
         end: 'bottom top',
       },
     });
 
-    const handleMouseEnter = () => {
-      gsap.to(button, {
-        scale: 1.05,
-        duration: 0.3,
-        ease: 'power4.out',
-      });
-    };
-
-    const handleMouseLeave = () => {
-      gsap.to(button, {
-        scale: 1,
-        duration: 0.3,
-        ease: 'power4.out',
-      });
-    };
-
-    button.addEventListener('mouseenter', handleMouseEnter);
-    button.addEventListener('mouseleave', handleMouseLeave);
-
     return () => {
-      button.removeEventListener('mouseenter', handleMouseEnter);
-      button.removeEventListener('mouseleave', handleMouseLeave);
       ScrollTrigger.getAll().forEach((trigger) => {
-        if (trigger.trigger === button) {
+        if (trigger.trigger === element) {
           trigger.kill();
         }
       });
     };
   }, []);
 
+  const buttonClass = `${
+    styles[variant]
+  } cursor-pointer text-lg md:text-xl py-2 px-3 md:py-4 md:px-6 rounded-lg font-bold shadow-sm hover:shadow-lg transition-shadow 
+      ${buttonWidth === 'full' ? 'w-full' : ''}`;
+
+  if (animation) {
+    return (
+      <button ref={elRef} onClick={onClick} className={buttonClass}>
+        {children}
+      </button>
+    );
+  }
+
   return (
-    <button
-    ref= {buttonRef}
-      onClick={onClick}
-      className={`cursor-pointer text-lg md:text-xl py-2 px-3 md:py-4 md:px-6 rounded-lg font-bold shadow-sm hover:shadow-lg transition-shadow ${styles[variant]}`}
-    >
+    <button onClick={onClick} className={buttonClass}>
       {children}
     </button>
   );

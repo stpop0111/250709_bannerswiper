@@ -25,6 +25,37 @@ export default function Home() {
   const [results, setResults] = useState([]); // 判定結果の保存
   const imageRef = useRef(null); // 画像要素の直接参照
 
+  const [savedSessions, setsavedSessions] = useState([]); // セッション一覧の管理
+
+  // ローカルストレージへのデータ保存
+  const saveToLocalStorage = (sessionData) => {
+    try {
+      // 既存のセッションを取得
+      const existingSessions = JSON.parse(
+        localStorage.getItem('bannerSessions') || '[]'
+      );
+      // 既存のセッションに新規のセッションを追加
+      const updatedSessions = [...existingSessions, sessionData];
+      // ローカルストレージにセッションを保存
+      localStorage.setItem('bannerSessions', JSON.stringify(updatedSessions));
+    } catch (error) {
+      alert('保存に失敗しました');
+    }
+  };
+
+  // ローカルストレージからデータを取得
+  const loadSavedSessions = () => {
+    try {
+      const stored = localStorage.getItem('bannerSessions');
+      if (stored) {
+        const sessions = JSON.parse(stored);
+        setsavedSessions(Array.isArray(sessions) ? sessions : []);
+      }
+    } catch (error) {
+      setsavedSessions([]);
+    }
+  };
+
   // 画面の表示切替
   const changeScreen = (screenName) => {
     if (screenName !== mode) {
@@ -34,6 +65,10 @@ export default function Home() {
     if (mode === 'input') {
       setCurrentIndex(0);
       setResults([]);
+    }
+
+    if (screenName === 'library') {
+      loadSavedSessions();
     }
   };
 
@@ -146,7 +181,7 @@ export default function Home() {
   };
 
   return (
-    <div className='min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4 overflow-hidden'>
+    <div className='min-h-screen bg-gray-100 overflow-hidden'>
       {/* タイトル画面 */}
       <FadeTransition animationKey={mode}>
         {mode === 'title' && (
@@ -179,12 +214,18 @@ export default function Home() {
         {mode === 'result' && (
           <ResultScreen
             results={results}
+            images={images}
             changeInput={() => changeScreen('input')}
+            saveToLocalStorage={saveToLocalStorage}
           />
         )}
         {/* ライブラリー */}
         {mode === 'library' && (
-          <LibraryScreen changeTitle={() => changeScreen('title')} />
+          <LibraryScreen 
+            changeTitle={() => changeScreen('title')} 
+            changeInput={() => changeScreen('input')} 
+            savedSessions={savedSessions}
+          />
         )}
       </FadeTransition>
     </div>

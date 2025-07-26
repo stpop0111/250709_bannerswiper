@@ -6,11 +6,11 @@ export default function SwipeScreen({
   currentIndex,
   animateChoice,
   previousImage,
-  changeInput
+  changeInput,
 }) {
   return (
-    <div className='w-full max-w-2xl'>
-      <div className='bg-white rounded-lg p-4'>
+    <div className='min-h-screen flex items-center justify-center p-2'>
+      <div className='w-full max-w-2xl mx-auto my-auto'>
         {/* 進捗 */}
         <div className='text-center mb-2'>
           <p className='text-gray-600 font-bold'>
@@ -46,14 +46,17 @@ export default function SwipeScreen({
               ❤
             </Button>
           </div>
-          <div className='flex gap-3 justify-center mb-4'>
-            <Button
-              onClick={changeInput}
-              variant='optional'
-            >
+
+          {/* オプショナルボタン */}
+          <div className='flex gap-3 justify-center mt-6'>
+            <Button onClick={changeInput} variant='optional' buttonWidth='full'>
               入力に戻る
             </Button>
-            <Button onClick={previousImage} variant='optional'>
+            <Button
+              onClick={previousImage}
+              variant='optional'
+              buttonWidth='full'
+            >
               ひとつ戻る
             </Button>
           </div>

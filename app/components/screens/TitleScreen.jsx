@@ -1,20 +1,24 @@
-import Button from "../common/Button"
+import Button from '../common/Button';
 
-export default function TitleScreen ({changeInput, changeLibrary}) {
-  return(
-    <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-5xl m-auto">
-      {/* タイトル */}
-      <div className="text-center mb-4">
-        <h1 className="text-5xl font-bold text-gray-900 mb-2">Banner Swiper</h1>
-        <p className="text-lg">デザインを直感的に・楽しく・保存しよう！</p>
-      </div>
+export default function TitleScreen({ changeInput, changeLibrary }) {
+  return (
+    <div className='min-h-screen flex items-center justify-center p-2'>
+      <div className='w-full max-w-2xl mx-auto my-auto'>
+        {/* タイトル */}
+        <div className='text-center mb-4'>
+          <h1 className='text-5xl font-bold text-gray-900 mb-2'>
+            Banner Swiper
+          </h1>
+          <p className='text-lg'>デザインを直感的に・楽しく・保存しよう！</p>
+        </div>
 
-      {/* アプリ説明 */}
-      <div className="mb-8">
-        <div className="m-auto max-w-5xl">
-          <div className="bg-gray-100 rounded-lg border-2 overflow-hidden border-gray-300">
-            <h3 className="text-center font-semibold text-2xl bg-gray-900 text-gray-50 p-4">使い方</h3>
-            <ul className="p-4 text-sm leading-loose">
+        {/* アプリ説明 */}
+        <div className='w-full'>
+          <div className='bg-gray-100 rounded-lg border-2 overflow-hidden border-gray-300'>
+            <h3 className='text-center font-semibold text-2xl bg-gray-900 text-gray-50 p-4'>
+              使い方
+            </h3>
+            <ul className='p-4 text-sm leading-loose'>
               <li>雰囲気を選択して...</li>
               <li>画像のURLを入力</li>
               <li>右にスワイプ → 雰囲気に合ってる！👍</li>
@@ -24,20 +28,19 @@ export default function TitleScreen ({changeInput, changeLibrary}) {
             </ul>
           </div>
         </div>
-      </div>
 
-      {/* ボタン */}
-      <div className="max-w-2xl m-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <Button onClick={changeInput} variant='primary'>
-            デザインを探索する
-          </Button>
-          <Button onClick={changeLibrary} variant='optional'>
-            今までのスワイプを見る
-          </Button>
+        {/* ボタン */}
+        <div className='w-full max-w-2xl mt-6'>
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
+            <Button onClick={changeInput} variant='primary'>
+              デザインを探索する
+            </Button>
+            <Button onClick={changeLibrary} variant='optional'>
+              今までのスワイプを見る
+            </Button>
+          </div>
         </div>
       </div>
-
     </div>
-  )
+  );
 }
