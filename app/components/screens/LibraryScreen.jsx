@@ -5,6 +5,7 @@ export default function LibraryScreen({
   changeTitle,
   changeInput,
   savedSessions,
+  deleteAllSessions,
 }) {
   const [selectedSession, setSelectedSession] = useState(null); // 選択済みセッションの状態管理
 
@@ -54,7 +55,11 @@ export default function LibraryScreen({
             {/* ボタン */}
             <div className='mt-6 w-full mx-auto'>
               <div className=''>
-                <Button onClick={backToList} variant='optional' buttonWidth='full'>
+                <Button
+                  onClick={backToList}
+                  variant='optional'
+                  buttonWidth='full'
+                >
                   リストに戻る
                 </Button>
               </div>
@@ -97,18 +102,21 @@ export default function LibraryScreen({
 
             {/* ボタン */}
             <div className='mt-6 w-full mx-auto'>
-              <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
+              <div className='grid grid-cols-1 md:grid-cols-2 gap-3 mb-4'>
                 <Button onClick={changeInput} variant='primary'>
                   デザインを探索する
                 </Button>
-                <Button
-                  onClick={changeTitle}
-                  variant='optional'
-                  buttonWidth='full'
-                >
+                <Button onClick={changeTitle} variant='optional'>
                   タイトルに戻る
                 </Button>
               </div>
+              <Button
+                onClick={deleteAllSessions}
+                variant='dislike'
+                buttonWidth='full'
+              >
+                すべて削除する
+              </Button>
             </div>
           </>
         )}

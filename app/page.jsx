@@ -56,6 +56,17 @@ export default function Home() {
     }
   };
 
+  // データをすべて削除
+  const deleteAllSessions = () => {
+    try {
+      localStorage.removeItem('bannerSessions');
+      setsavedSessions([]);
+      alert('すべてのデータを削除しました');
+    } catch (error) {
+      alert('削除に失敗しました');
+    }
+  }
+
   // 画面の表示切替
   const changeScreen = (screenName) => {
     if (screenName !== mode) {
@@ -225,6 +236,7 @@ export default function Home() {
             changeTitle={() => changeScreen('title')} 
             changeInput={() => changeScreen('input')} 
             savedSessions={savedSessions}
+            deleteAllSessions={deleteAllSessions}
           />
         )}
       </FadeTransition>
