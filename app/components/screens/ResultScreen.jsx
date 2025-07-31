@@ -4,12 +4,7 @@ import Button from '../common/Button';
 import gsap from 'gsap';
 import { useState, useEffect, useRef } from 'react';
 
-export default function ResultScreen({
-  results,
-  images,
-  changeInput,
-  saveToLocalStorage,
-}) {
+export default function ResultScreen({ results, images, onNavigate }) {
   const [saveSession, setSaveSession] = useState(false); // 保存ダイアログ
   const [sessionName, setSessionName] = useState(''); // セッション名の保存
   const elRef = useRef(null);
@@ -83,6 +78,24 @@ export default function ResultScreen({
     saveToLocalStorage(sessionData); // ローカルストレージに保存
     closeModal(); // モーダルウィンドウを閉じる
     alert('保存しました');
+    onNavigate('title');
+  };
+
+  // ローカルストレージへの保存
+  // =======================================
+  const saveToLocalStorage = (sessionData) => {
+    try {
+      // 既存のセッションを取得
+      const existingSessions = JSON.parse(
+        localStorage.getItem('bannerSessions') || '[]'
+      );
+      // 既存のセッションに新規のセッションを追加
+      const updatedSessions = [...existingSessions, sessionData];
+      // ローカルストレージにセッションを保存
+      localStorage.setItem('bannerSessions', JSON.stringify(updatedSessions));
+    } catch (error) {
+      alert('保存に失敗しました');
+    }
   };
 
   return (
@@ -146,16 +159,19 @@ export default function ResultScreen({
         </div>
 
         {/* 画像表示 */}
-        <div className='bg-white rounded-lg p-4'>
-          <div className='grid grid-cols-1 gap-4'>
+        <div className='bg-white rounded-lg'>
+          <div className='grid grid-cols-4 p-2 gap-2'>
             {results
               .filter((result) => result.choice === 'like')
               .map((result, index) => (
-                <div key={index}>
+                <div
+                  key={index}
+                  className='w-full aspect-square flex justify-center items-center bg-gray-200 p-2'
+                >
                   <img
                     src={result.image}
                     alt={`好きな画像 ${index + 1}`}
-                    className='w-full object-cover'
+                    className='h-full object-cover'
                   />
                 </div>
               ))}
@@ -165,7 +181,7 @@ export default function ResultScreen({
         {/* ボタン */}
         <div className='max-w-2xl m-auto mt-6'>
           <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
-            <Button onClick={changeInput} variant='optional'>
+            <Button onClick={() => onNavigate('input')} variant='optional'>
               入力に戻る
             </Button>
             <Button onClick={openModal} variant='optional'>

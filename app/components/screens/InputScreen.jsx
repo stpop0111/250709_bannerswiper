@@ -1,11 +1,31 @@
 import Button from '../common/Button';
+import { useState, useEffect, useRef } from 'react';
 
-export default function InputScreen({
-  inputUrls,
-  setInputUrls,
-  handleUrlSubmit,
-  changeTitle,
-}) {
+export default function InputScreen({ onNavigate, onComplete }) {
+  const [inputUrls, setInputUrls] = useState(''); //urlの入力
+
+  // 画像URLを記入時
+  // =======================================
+  const handleUrlSubmit = () => {
+    if (!inputUrls.trim()) {
+      alert('画像URLを入力してください');
+      return;
+    }
+
+    // 改行でURLを分割 -> 配列にセットする
+    const urlArray = inputUrls
+      .split('\n')
+      .filter((url) => url.trim() !== '')
+      .map((url) => url.trim());
+
+    if (urlArray.length === 0) {
+      alert('有効なURLを入力してください');
+      return;
+    }
+    
+    onComplete(urlArray);
+  };
+
   return (
     <div className='min-h-screen flex items-center justify-center p-2'>
       <div className='w-full max-w-2xl mx-auto my-auto'>
@@ -50,7 +70,7 @@ https://example.com/image3.jpg
 
         {/* タイトルに戻るボタン */}
         <div className='w-full'>
-          <Button onClick={changeTitle} variant='optional' buttonWidth='full'>
+          <Button onClick={() => onNavigate('title')} variant='optional' buttonWidth='full'>
             タイトルに戻る
           </Button>
         </div>

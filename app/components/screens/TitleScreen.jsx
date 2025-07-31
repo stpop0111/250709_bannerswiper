@@ -1,6 +1,6 @@
 import Button from '../common/Button';
 
-export default function TitleScreen({ changeInput, changeLibrary }) {
+export default function TitleScreen({ onNavigate }) {
   return (
     <div className='min-h-screen flex items-center justify-center p-2'>
       <div className='w-full max-w-2xl mx-auto my-auto'>
@@ -32,10 +32,10 @@ export default function TitleScreen({ changeInput, changeLibrary }) {
         {/* ボタン */}
         <div className='w-full max-w-2xl mt-6'>
           <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
-            <Button onClick={changeInput} variant='primary'>
+            <Button onClick={() => onNavigate('input')} variant='primary'>
               デザインを探索する
             </Button>
-            <Button onClick={changeLibrary} variant='optional'>
+            <Button onClick={() => onNavigate('library')} variant='optional'>
               今までのスワイプを見る
             </Button>
           </div>

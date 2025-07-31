@@ -1,13 +1,37 @@
 import Button from '../common/Button';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export default function LibraryScreen({
-  changeTitle,
-  changeInput,
-  savedSessions,
-  deleteAllSessions,
+  onNavigate,
 }) {
   const [selectedSession, setSelectedSession] = useState(null); // 選択済みセッションの状態管理
+  const [savedSessions, setsavedSessions] = useState([]); // セッション一覧の管理
+
+  // ローカルストレージをロード
+  // =======================================
+  const loadSavedSessions = () => {
+    try {
+      const stored = localStorage.getItem('bannerSessions');
+      if (stored) {
+        const sessions = JSON.parse(stored);
+        setsavedSessions(Array.isArray(sessions) ? sessions : []);
+      }
+    } catch (error) {
+      setsavedSessions([]);
+    }
+  }
+
+  // ローカルストレージの削除
+  // =======================================
+  const deleteAllSessions = () => {
+    try {
+      localStorage.removeItem('bannerSessions');
+      setsavedSessions([]);
+      alert('すべてのデータを削除しました');
+    } catch (error) {
+      alert('削除に失敗しました');
+    }
+  };
 
   // セッションの選択
   const selectSession = (session) => {
@@ -18,6 +42,12 @@ export default function LibraryScreen({
   const backToList = () => {
     setSelectedSession(null);
   };
+
+  // 画面表示時にデータを読み込み
+  useEffect(() => {
+    loadSavedSessions();
+  }, []); 
+
   return (
     <div className='min-h-screen flex items-center justify-center p-2'>
       <div className='w-full max-w-2xl mx-auto my-auto'>
@@ -103,10 +133,10 @@ export default function LibraryScreen({
             {/* ボタン */}
             <div className='mt-6 w-full mx-auto'>
               <div className='grid grid-cols-1 md:grid-cols-2 gap-3 mb-4'>
-                <Button onClick={changeInput} variant='primary'>
+                <Button onClick={() => onNavigate('input')} variant='primary'>
                   デザインを探索する
                 </Button>
-                <Button onClick={changeTitle} variant='optional'>
+                <Button onClick={() => onNavigate('title')} variant='optional'>
                   タイトルに戻る
                 </Button>
               </div>
