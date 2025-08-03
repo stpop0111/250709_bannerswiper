@@ -49,7 +49,17 @@ const MoodDisplay = ({ selectedMoods }) => {
   );
 };
 
-export default function SwipeScreen({ images, onComplete, onNavigate, selectedMoods }) {
+export default function SwipeScreen({
+  images,
+  onComplete,
+  onNavigate,
+  selectedMoods,
+}) {
+  console.log('SwipeScreenで受け取った雰囲気:', selectedMoods);
+  console.log('雰囲気の中身:', JSON.stringify(selectedMoods, null, 2));
+  console.log('category:', selectedMoods.category);
+  console.log('taste:', selectedMoods.taste);
+  console.log('color:', selectedMoods.color);
   // 状態管理の宣言
   const [currentIndex, setCurrentIndex] = useState(0); // 現在の画像番号
   const [results, setResults] = useState([]); // 判定結果の保存
@@ -203,9 +213,7 @@ export default function SwipeScreen({ images, onComplete, onNavigate, selectedMo
     <div className='min-h-screen flex items-center justify-center p-2'>
       <div className='w-full max-w-2xl mx-auto my-auto'>
         {/* 選択した雰囲気 */}
-        <MoodDisplay
-          selectedMoods={selectedMoods}
-        />
+        <MoodDisplay selectedMoods={selectedMoods} />
         {/* 進捗 */}
         <div className='text-center mb-2'>
           <p className='text-gray-600 font-bold'>

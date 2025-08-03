@@ -67,6 +67,8 @@ export default function InputScreen({ onNavigate, onComplete }) {
       }
 
       setIsLoading(false);
+      console.log('InputScreenで送る雰囲気:', selectMood);
+      console.log('selectMoodの中身:', JSON.stringify(selectMood, null, 2));
       onComplete(validImages, selectMood);
     } catch (error) {
       alert('ロード中にエラーが発生しました');
@@ -110,7 +112,7 @@ export default function InputScreen({ onNavigate, onComplete }) {
                   onChange={(e) => handleSelectMood('category', e.target.value)}
                   className='w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-600'
                 >
-                  <option value="">選択してください</option>
+                  <option value=''>選択してください</option>
                   {moodOptions.category.map((option) => (
                     <option key={option.id} value={option.id}>
                       {option.label}
@@ -128,7 +130,7 @@ export default function InputScreen({ onNavigate, onComplete }) {
                   onChange={(e) => handleSelectMood('taste', e.target.value)}
                   className='w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-600'
                 >
-                  <option value="">選択してください</option>
+                  <option value=''>選択してください</option>
                   {moodOptions.taste.map((option) => (
                     <option key={option.id} value={option.id}>
                       {option.label}
@@ -146,7 +148,7 @@ export default function InputScreen({ onNavigate, onComplete }) {
                   onChange={(e) => handleSelectMood('color', e.target.value)}
                   className='w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-600'
                 >
-                  <option value="">選択してください</option>
+                  <option value=''>選択してください</option>
                   {moodOptions.color.map((option) => (
                     <option key={option.id} value={option.id}>
                       {option.label}

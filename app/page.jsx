@@ -23,7 +23,7 @@ export default function Home() {
     setMode(screenName);
 
     // 記入画面に切り替え時 -> スワイプの結果を削除
-    if (mode === 'input') {
+    if (screenName === 'input') {
       setResults([]);
       setSelectedMoods({});
     }
