@@ -14,6 +14,7 @@ export default function Home() {
   const [mode, setMode] = useState('title'); //画面モードの状態管理
   const [images, setImages] = useState([]); // 画像の配列
   const [results, setResults] = useState([]); // スワイプ結果
+  const [selectedMoods, setSelectedMoods] = useState({}) // 選択した雰囲気
 
   // 画面の表示切替
   // =======================================
@@ -24,6 +25,7 @@ export default function Home() {
     // 記入画面に切り替え時 -> スワイプの結果を削除
     if (mode === 'input') {
       setResults([]);
+      setSelectedMoods({});
     }
   };
 
@@ -36,8 +38,9 @@ export default function Home() {
 
   // InputScreen.jsx -> URLの記入完了時
   // =======================================
-  const handleInputComplete = (inputUrls) => {
+  const handleInputComplete = (inputUrls, moods) => {
     setImages(inputUrls);
+    setSelectedMoods(moods)
     setResults([]);
     changeScreen('swipe');
   }
@@ -63,6 +66,7 @@ export default function Home() {
         {mode === 'swipe' && (
           <SwipeScreen
             images={images}
+            selectedMoods={selectedMoods}
             onComplete={handleSwipeComplete}
             onNavigate={changeScreen}
           />
@@ -72,6 +76,7 @@ export default function Home() {
           <ResultScreen
             results={results}
             images={images}
+            selectedMoods={selectedMoods}
             onNavigate={changeScreen}
           />
         )}

@@ -9,7 +9,8 @@ export default function ResultScreen({ results, images, onNavigate }) {
   const [sessionName, setSessionName] = useState(''); // セッション名の保存
   const elRef = useRef(null);
 
-  // アニメーション
+  // モーダル表示
+  // =======================================
   useEffect(() => {
     const element = elRef.current;
 
@@ -34,6 +35,19 @@ export default function ResultScreen({ results, images, onNavigate }) {
     };
   }, [saveSession]);
 
+  // モダールウィンドウ表示
+  const openModal = () => {
+    const defaultName = createDefaultName();
+    setSessionName(defaultName);
+    setSaveSession(true);
+  };
+  // モダールウィンドウ非表示
+  const closeModal = () => {
+    setSaveSession(false);
+  };
+
+  // セッションの保存
+  // =======================================
   // 初期の名前（保存日）
   const createDefaultName = () => {
     const now = new Date();
@@ -47,18 +61,23 @@ export default function ResultScreen({ results, images, onNavigate }) {
     return currentDate;
   };
 
-  // モダールウィンドウ表示
-  const openModal = () => {
-    const defaultName = createDefaultName();
-    setSessionName(defaultName);
-    setSaveSession(true);
-  };
-  // モダールウィンドウ非表示
-  const closeModal = () => {
-    setSaveSession(false);
+  // ローカルストレージへの保存
+  const saveToLocalStorage = (sessionData) => {
+    try {
+      // 既存のセッションを取得
+      const existingSessions = JSON.parse(
+        localStorage.getItem('bannerSessions') || '[]'
+      );
+      // 既存のセッションに新規のセッションを追加
+      const updatedSessions = [...existingSessions, sessionData];
+      // ローカルストレージにセッションを保存
+      localStorage.setItem('bannerSessions', JSON.stringify(updatedSessions));
+    } catch (error) {
+      alert('保存に失敗しました');
+    }
   };
 
-  // セッションの保存
+  // セッションの保存ハンドリング
   const handleSave = () => {
     // セッション名を確認
     if (!sessionName.trim()) {
@@ -81,22 +100,33 @@ export default function ResultScreen({ results, images, onNavigate }) {
     onNavigate('title');
   };
 
-  // ローカルストレージへの保存
-  // =======================================
-  const saveToLocalStorage = (sessionData) => {
-    try {
-      // 既存のセッションを取得
-      const existingSessions = JSON.parse(
-        localStorage.getItem('bannerSessions') || '[]'
-      );
-      // 既存のセッションに新規のセッションを追加
-      const updatedSessions = [...existingSessions, sessionData];
-      // ローカルストレージにセッションを保存
-      localStorage.setItem('bannerSessions', JSON.stringify(updatedSessions));
-    } catch (error) {
-      alert('保存に失敗しました');
-    }
-  };
+  if (results.filter((result) => result.choice === 'like').length === 0) {
+    return (
+      <div className='min-h-screen flex items-center justify-center p-2'>
+        <div className='w-full max-w-2xl mx-auto my-auto'>
+          {/* タイトル */}
+          <div className='text-center mb-4'>
+            <h2 className='text-5xl font-bold text-gray-900 mb-2'>
+              選んだバナーがありません
+            </h2>
+            <p className='text-lg'>あれ？全部イマイチだったかな？</p>
+          </div>
+
+          {/* ボタン */}
+          <div className='max-w-2xl m-auto mt-6'>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
+              <Button onClick={() => onNavigate('input')} variant='primary'>
+                入力に戻る
+              </Button>
+              <Button onClick={() => onNavigate('library')} variant='optional'>
+                ライブラリーを見る
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className='min-h-screen flex items-center justify-center p-2'>

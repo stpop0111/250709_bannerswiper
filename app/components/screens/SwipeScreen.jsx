@@ -1,11 +1,55 @@
 import Button from '../common/Button';
+import { moodOptions, axisLabels } from '../../data/options';
 import { useState, useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { Draggable } from 'gsap/Draggable';
 
 gsap.registerPlugin(Draggable);
 
-export default function SwipeScreen({ images, onComplete, onNavigate }) {
+const MoodDisplay = ({ selectedMoods }) => {
+  const getMood = (axis, id) => {
+    if (!id) {
+      return null;
+    }
+    const option = moodOptions[axis].find((item) => item.id === id);
+    return option ? option.label : null;
+  };
+  const hasSelectedMood =
+    selectedMoods.category || selectedMoods.taste || selectedMoods.color;
+
+  if (!hasSelectedMood) {
+    return null;
+  }
+
+  return (
+    <div className='mb-4 p-3 bg-blue-50 rounded-lg border border-blue-200'>
+      <div className='text-center'>
+        <p className='text-sm text-blue-800 font-semibold mb-2'>
+          選択した雰囲気
+        </p>
+        <div className='flex flex-wrap justify-center gap-2 text-xs'>
+          {selectedMoods.category && (
+            <span className='bg-white px-2 py-1 rounded border text-blue-700'>
+              {getMood('category', selectedMoods.category)}
+            </span>
+          )}
+          {selectedMoods.taste && (
+            <span className='bg-white px-2 py-1 rounded border text-blue-700'>
+              {getMood('taste', selectedMoods.taste)}
+            </span>
+          )}
+          {selectedMoods.color && (
+            <span className='bg-white px-2 py-1 rounded border text-blue-700'>
+              {getMood('color', selectedMoods.color)}
+            </span>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default function SwipeScreen({ images, onComplete, onNavigate, selectedMoods }) {
   // 状態管理の宣言
   const [currentIndex, setCurrentIndex] = useState(0); // 現在の画像番号
   const [results, setResults] = useState([]); // 判定結果の保存
@@ -147,7 +191,7 @@ export default function SwipeScreen({ images, onComplete, onNavigate }) {
       <div className='min-h-screen flex items-center justify-center p-2'>
         <div className='text-center'>
           <p className='text-xl text-gray-600 mb-4'>画像がありません</p>
-          <Button onClick={changeInput} variant='optional'>
+          <Button onClick={() => onNavigate('input')} variant='optional'>
             入力に戻る
           </Button>
         </div>
@@ -158,6 +202,10 @@ export default function SwipeScreen({ images, onComplete, onNavigate }) {
   return (
     <div className='min-h-screen flex items-center justify-center p-2'>
       <div className='w-full max-w-2xl mx-auto my-auto'>
+        {/* 選択した雰囲気 */}
+        <MoodDisplay
+          selectedMoods={selectedMoods}
+        />
         {/* 進捗 */}
         <div className='text-center mb-2'>
           <p className='text-gray-600 font-bold'>
@@ -166,8 +214,8 @@ export default function SwipeScreen({ images, onComplete, onNavigate }) {
           </p>
         </div>
         {/* 画像表示エリア */}
-        <div className='mb-6'>
-          <div className='p-4 bg-white w-full aspect-square flex justify-center items-center'>
+        <div className='mb-6 flex items-center justify-center'>
+          <div className='p-4 bg-white h-[50vh] aspect-square flex justify-center items-center'>
             <img
               ref={imageRef}
               src={images[currentIndex]}
