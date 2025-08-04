@@ -31,8 +31,9 @@ export default function Home() {
 
   // SwipeScreen.jsx -> 完了時の処理
   // =======================================
-  const handleSwipeComplete = (swipeResults) => {
+  const handleSwipeComplete = (swipeResults, moods) => {
     setResults(swipeResults);
+    setSelectedMoods(moods)
     changeScreen('result');
   }
 

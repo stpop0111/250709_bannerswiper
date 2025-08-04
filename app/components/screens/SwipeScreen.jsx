@@ -1,11 +1,13 @@
 import Button from '../common/Button';
 import MoodDisplay from '../common/MoodDisplay';
+import TitleText from '../common/TitleText';
+
+import { aspectCalc } from '../../utils/aspectCalc';
 import { useState, useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { Draggable } from 'gsap/Draggable';
 
 gsap.registerPlugin(Draggable);
-
 
 export default function SwipeScreen({
   images,
@@ -17,25 +19,13 @@ export default function SwipeScreen({
   const [currentIndex, setCurrentIndex] = useState(0); // 現在の画像番号
   const [results, setResults] = useState([]); // 判定結果の保存
   const imageRef = useRef(null); // 画像要素の直接参照
-  const [imageSize, setImageSize] = useState('w-full'); //画面サイズの保存
+  const [imageSize, setImageSize] = useState('w-full');
 
-  // 画像のアスペクト比計算
+  // 画像のアスペクト比計算(外部JS連携)
   // =======================================
   const handleImageLoad = (e) => {
-    const img = e.target;
-    const aspectRatio = img.naturalWidth / img.naturalHeight;
-
-    // アスペクト比が1を超えている場合
-    if (aspectRatio > 1) {
-      setImageSize('w-full'); // 横長画像
-    } else {
-      setImageSize('h-full'); // 縦長画像
-    }
+    aspectCalc(e, setImageSize);
   };
-  // 画像切り替え時のリセット
-  useEffect(() => {
-    setImageSize('w-full');
-  }, [currentIndex]);
 
   // スワイプの処理
   // =======================================
@@ -56,7 +46,6 @@ export default function SwipeScreen({
 
         gsap.set(imageRef.current, {
           opacity: 1 - progress * 0.8,
-          scale: Math.max(1 - progress * 0.8, 0.8),
           rotation: x * 0.15,
         });
       },
@@ -126,7 +115,7 @@ export default function SwipeScreen({
     if (currentIndex < images.length - 1) {
       setCurrentIndex(currentIndex + 1);
     } else {
-      onComplete(updatedResults); // 親コンポーネントに値を返す
+      onComplete(updatedResults, selectedMoods); // 親コンポーネントに値を返す
     }
   };
 
@@ -165,23 +154,24 @@ export default function SwipeScreen({
   return (
     <div className='min-h-screen flex items-center justify-center p-2'>
       <div className='w-full max-w-2xl mx-auto my-auto'>
+        <TitleText mainText={'あなたの好きなバナーはあるかな？'} />
         {/* 選択した雰囲気 */}
         <MoodDisplay selectedMoods={selectedMoods} />
         {/* 進捗 */}
         <div className='text-center mb-2'>
           <p className='text-gray-600 font-bold'>
-            <span className='text-xl'>{currentIndex + 1}</span> /{' '}
+            <span className='text-xl'>{currentIndex + 1}</span> /
             <span className='text-red-400'>{images.length}</span>
           </p>
         </div>
         {/* 画像表示エリア */}
         <div className='mb-6 flex items-center justify-center'>
-          <div className='p-4 bg-white h-[50vh] aspect-square flex justify-center items-center'>
+          <div className='p-4 bg-slate-200 h-[50vh] aspect-square flex justify-center items-center'>
             <img
               ref={imageRef}
               src={images[currentIndex]}
               alt={`image ${currentIndex + 1}`}
-              className={`object-cover ${imageSize}`}
+              className={`object-cover shadow-lg ${imageSize}`}
               style={{ touchAction: 'none' }}
               onLoad={handleImageLoad}
               onError={(e) => {
@@ -218,7 +208,7 @@ export default function SwipeScreen({
             </Button>
             <Button
               onClick={previousImage}
-              variant='optional'
+              variant='primary'
               buttonWidth='full'
             >
               ひとつ戻る({results.length}個を選択済み)

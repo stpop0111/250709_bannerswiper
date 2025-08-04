@@ -1,9 +1,8 @@
 import Button from '../common/Button';
+import MoodDisplay from '../common/MoodDisplay';
 import { useState, useEffect, useRef } from 'react';
 
-export default function LibraryScreen({
-  onNavigate,
-}) {
+export default function LibraryScreen({ onNavigate }) {
   const [selectedSession, setSelectedSession] = useState(null); // 選択済みセッションの状態管理
   const [savedSessions, setsavedSessions] = useState([]); // セッション一覧の管理
 
@@ -19,7 +18,7 @@ export default function LibraryScreen({
     } catch (error) {
       setsavedSessions([]);
     }
-  }
+  };
 
   // ローカルストレージの削除
   // =======================================
@@ -46,7 +45,7 @@ export default function LibraryScreen({
   // 画面表示時にデータを読み込み
   useEffect(() => {
     loadSavedSessions();
-  }, []); 
+  }, []);
 
   return (
     <div className='min-h-screen flex items-center justify-center p-2'>
@@ -63,6 +62,10 @@ export default function LibraryScreen({
                 作成日：
                 {new Date(selectedSession.createdAt).toLocaleDateString()}
               </p>
+              <div className="mt-3">
+                <MoodDisplay selectedMoods={selectedSession.selectedMoods} />
+              </div>
+
             </div>
 
             {/* 画像表示 */}
@@ -119,11 +122,15 @@ export default function LibraryScreen({
                       className='cursor-pointer border rounded-lg p-4'
                       onClick={() => selectSession(session)}
                     >
-                      <h3 className='font-bold text-lg mb-2'>{session.name}</h3>
+                      <h3 className='font-bold text-lg mb-2'>{session.name}</h3>{' '}
+                      {/* タイトル */}
                       <p className='text-sm text-gray-800 mb-2'>
+                        {' '}
+                        {/* 作成日 */}
                         作成日：
                         {new Date(session.createdAt).toLocaleDateString()}
                       </p>
+                      <MoodDisplay selectedMoods={session.selectedMoods} />
                     </div>
                   ))}
                 </div>
