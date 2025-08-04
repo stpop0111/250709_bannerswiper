@@ -46,6 +46,15 @@ export default function Home() {
     changeScreen('swipe');
   };
 
+  // 雰囲気を削除する
+  // =======================================
+  const handleDeleteMood = (moodType) => {
+    setSelectedMoods((prev) => ({
+      ...prev,
+      [moodType]: '', // そのmoodTypeを空文字にして削除
+    }));
+  };
+
   return (
     <div className="min-h-screen overflow-hidden bg-gray-100">
       {/* タイトル画面 */}
@@ -65,6 +74,7 @@ export default function Home() {
             selectedMoods={selectedMoods}
             onComplete={handleSwipeComplete}
             onNavigate={changeScreen}
+            onDeleteMood={handleDeleteMood}
           />
         )}
         {/* 結果画面 */}
@@ -74,10 +84,11 @@ export default function Home() {
             images={images}
             selectedMoods={selectedMoods}
             onNavigate={changeScreen}
+            onDeleteMood={handleDeleteMood}
           />
         )}
         {/* ライブラリー */}
-        {mode === 'library' && <LibraryScreen onNavigate={changeScreen} />}
+        {mode === 'library' && <LibraryScreen onNavigate={changeScreen} onDeleteMood={handleDeleteMood}/>}
       </FadeTransition>
     </div>
   );

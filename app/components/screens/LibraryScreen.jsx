@@ -5,7 +5,7 @@ import ScreenWrapper from '../common/ScreenWrapper';
 import { aspectCalc } from '../../utils/aspectCalc';
 import { useState, useEffect, useRef } from 'react';
 
-export default function LibraryScreen({ onNavigate }) {
+export default function LibraryScreen({ onNavigate, onDeleteMood }) {
   const [selectedSession, setSelectedSession] = useState(null); // 選択済みセッションの状態管理
   const [savedSessions, setsavedSessions] = useState([]); // セッション一覧の管理
   const [imageStates, setImageStates] = useState({});
@@ -84,8 +84,13 @@ export default function LibraryScreen({ onNavigate }) {
                 作成日：
                 ${new Date(selectedSession.createdAt).toLocaleDateString()}`}
           />
-          <div className="mt-3">
-            <MoodDisplay selectedMoods={selectedSession.selectedMoods} />
+          <div className="mb-4 w-full">
+            <div className="mx-auto w-fit rounded-lg border border-blue-200 bg-blue-50 p-3">
+              <MoodDisplay
+                selectedMoods={selectedSession.selectedMoods}
+                readOnly={true}
+              />
+            </div>
           </div>
 
           {/* 画像表示 */}
@@ -166,7 +171,10 @@ export default function LibraryScreen({ onNavigate }) {
                       作成日：
                       {new Date(session.createdAt).toLocaleDateString()}
                     </p>
-                    <MoodDisplay selectedMoods={session.selectedMoods} />
+                    <MoodDisplay
+                      selectedMoods={session.selectedMoods}
+                      readOnly={true}
+                    />
                   </div>
                 ))}
               </div>

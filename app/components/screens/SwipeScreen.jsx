@@ -14,6 +14,7 @@ export default function SwipeScreen({
   images,
   onComplete,
   onNavigate,
+  onDeleteMood,
   selectedMoods,
 }) {
   // 状態管理の宣言
@@ -152,7 +153,7 @@ export default function SwipeScreen({
     <ScreenWrapper>
       <TitleText mainText={'あなたの好きなバナーはあるかな？'} />
       {/* 選択した雰囲気 */}
-      <MoodDisplay selectedMoods={selectedMoods}/>
+      <MoodDisplay selectedMoods={selectedMoods} onDeleteMoodType={onDeleteMood}/>
       {/* 進捗 */}
       <div className="mb-2 text-center">
         <p className="font-bold text-gray-600">

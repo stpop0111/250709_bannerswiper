@@ -14,6 +14,7 @@ export default function ResultScreen({
   images,
   onNavigate,
   selectedMoods,
+  onDeleteMood
 }) {
   const [saveSession, setSaveSession] = useState(false); // 保存ダイアログ
   const [sessionName, setSessionName] = useState(''); // セッション名の保存
@@ -217,7 +218,7 @@ export default function ResultScreen({
         </div>
         {/* 雰囲気表示 */}
         <div className="mb-3">
-          <MoodDisplay selectedMoods={selectedMoods} />
+          <MoodDisplay selectedMoods={selectedMoods} onDeleteMoodType={onDeleteMood}/>
         </div>
 
         {/* 画像表示 */}
