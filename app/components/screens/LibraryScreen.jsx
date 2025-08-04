@@ -189,8 +189,8 @@ export default function LibraryScreen({ onNavigate }) {
           </div>
 
           {/* 画像表示 */}
-          <div className="max-h-[300px] overflow-y-auto">
-            <div className="grid grid-cols-2 gap-4 bg-white p-4 md:grid-cols-3">
+          <div className="mb-6 max-h-[600px] overflow-y-auto">
+            <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
               {selectedSession.results
                 .filter((result) => result.choice === 'like')
                 .map((result, index) => {
@@ -201,21 +201,38 @@ export default function LibraryScreen({ onNavigate }) {
                   };
 
                   return (
-                    <div key={index} className="shadow-lg">
-                      <div className="flex aspect-square w-full flex-col items-center justify-center p-2">
+                    <div key={index} className="bg-white p-2">
+                      <div className="flex aspect-square flex-col items-center justify-center p-2">
                         <img
                           src={result.image}
                           alt={`好きな画像 ${index + 1}`}
-                          className={`object-cover ${imageState.size}`}
+                          className={`object-cover ${imageState.size} shadow-sm`}
                           onLoad={(e) => handleImageLoad(e, index)}
                           onError={(e) => {
                             e.target.src = '/test01.jpg';
                           }}
                         />
                       </div>
-                      <p className="w-full bg-white py-2 text-center text-lg">
-                        {imageState.width}×{imageState.height}
-                      </p>
+                      <div className="w-full border-t-1 border-t-slate-200 bg-white py-2 text-center">
+                        <p className="text-lg">
+                          {imageState.width}×{imageState.height}
+                          <p className="text-sm">
+                            (縦横比：
+                            {imageState.width / imageState.height === 1 ? (
+                              <span className="text-green-500">正方形</span>
+                            ) : imageState.width / imageState.height > 1 ? (
+                              <span>
+                                <span className="text-blue-500">横</span>型
+                              </span>
+                            ) : (
+                              <span>
+                                <span className="text-red-500">縦</span>型
+                              </span>
+                            )}
+                            )
+                          </p>
+                        </p>
+                      </div>
                     </div>
                   );
                 })}
@@ -272,7 +289,7 @@ export default function LibraryScreen({ onNavigate }) {
                       <CloseButton
                         onClick={(e) => openModal(e, session)}
                         addClass={
-                          'transition-all duration-200 md:opacity-0 md:scale-90 md:group-hover:opacity-100 md:group-hover:scale-100 opacity-100 scale-100'
+                          'bg-white hover:bg-slate-100 hover:border-slate-400 transition-all duration-200 md:opacity-0 md:scale-90 md:group-hover:opacity-100 md:group-hover:scale-100 opacity-100 scale-100'
                         }
                       />
                     </div>
