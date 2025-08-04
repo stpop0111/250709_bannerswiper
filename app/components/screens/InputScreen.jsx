@@ -67,8 +67,6 @@ export default function InputScreen({ onNavigate, onComplete }) {
       }
 
       setIsLoading(false);
-      console.log('InputScreenで送る雰囲気:', selectMood);
-      console.log('selectMoodの中身:', JSON.stringify(selectMood, null, 2));
       onComplete(validImages, selectMood);
     } catch (error) {
       alert('ロード中にエラーが発生しました');

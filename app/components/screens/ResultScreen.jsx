@@ -1,10 +1,11 @@
 'use client';
 
 import Button from '../common/Button';
+import MoodDisplay from '../common/MoodDisplay';
 import gsap from 'gsap';
 import { useState, useEffect, useRef } from 'react';
 
-export default function ResultScreen({ results, images, onNavigate }) {
+export default function ResultScreen({ results, images, onNavigate, selectedMoods }) {
   const [saveSession, setSaveSession] = useState(false); // 保存ダイアログ
   const [sessionName, setSessionName] = useState(''); // セッション名の保存
   const elRef = useRef(null);
@@ -104,6 +105,8 @@ export default function ResultScreen({ results, images, onNavigate }) {
     return (
       <div className='min-h-screen flex items-center justify-center p-2'>
         <div className='w-full max-w-2xl mx-auto my-auto'>
+          {/* 雰囲気表示 */}
+          <MoodDisplay selectedMoods={selectedMoods} />
           {/* タイトル */}
           <div className='text-center mb-4'>
             <h2 className='text-5xl font-bold text-gray-900 mb-2'>
