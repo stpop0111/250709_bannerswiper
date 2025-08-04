@@ -153,7 +153,14 @@ export default function SwipeScreen({
     <ScreenWrapper>
       <TitleText mainText={'あなたの好きなバナーはあるかな？'} />
       {/* 選択した雰囲気 */}
-      <MoodDisplay selectedMoods={selectedMoods} onDeleteMoodType={onDeleteMood}/>
+      <div className="mb-3">
+        <div className="mx-auto w-fit">
+          <MoodDisplay
+            selectedMoods={selectedMoods}
+            onDeleteMoodType={onDeleteMood}
+          />
+        </div>
+      </div>
       {/* 進捗 */}
       <div className="mb-2 text-center">
         <p className="font-bold text-gray-600">
@@ -180,12 +187,29 @@ export default function SwipeScreen({
             }}
           />
         </div>
-        <p className="text-center text-lg">
-          {imageWidth}×{imageHeight}
-        </p>
+        <div className="text-center">
+          <p className="text-lg">
+            {imageWidth}×{imageHeight}
+            <p className="text-sm">
+              (縦横比：
+              {imageWidth / imageHeight === 1 ? (
+                <span className="text-green-500">正方形</span>
+              ) : imageWidth / imageHeight > 1 ? (
+                <span>
+                  <span className="text-blue-500">横</span>型
+                </span>
+              ) : (
+                <span>
+                  <span className="text-red-500">縦</span>型
+                </span>
+              )}
+              )
+            </p>
+          </p>
+        </div>
       </div>
       {/* ボタン */}
-      <div className="top-[100%] m-auto">
+      <div className="w-full">
         <div className="mb-4 flex justify-center gap-3">
           <Button
             onClick={() => animateChoice('disLike', 'left')}

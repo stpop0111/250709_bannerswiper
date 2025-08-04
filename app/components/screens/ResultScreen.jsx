@@ -4,8 +4,6 @@ import Button from '../common/Button';
 import MoodDisplay from '../common/MoodDisplay';
 import TitleText from '../common/TitleText';
 import ScreenWrapper from '../common/ScreenWrapper';
-
-import { aspectCalc } from '../../utils/aspectCalc';
 import gsap from 'gsap';
 import { useState, useEffect, useRef } from 'react';
 
@@ -14,11 +12,10 @@ export default function ResultScreen({
   images,
   onNavigate,
   selectedMoods,
-  onDeleteMood
+  onDeleteMood,
 }) {
   const [saveSession, setSaveSession] = useState(false); // 保存ダイアログ
   const [sessionName, setSessionName] = useState(''); // セッション名の保存
-  const elRef = useRef(null);
   const [imageStates, setImageStates] = useState({});
 
   // 画像読み込み時の処理
@@ -44,6 +41,7 @@ export default function ResultScreen({
 
   // モーダル表示
   // =======================================
+  const elRef = useRef(null);
   useEffect(() => {
     const element = elRef.current;
 
@@ -170,7 +168,7 @@ export default function ResultScreen({
 
           {/* モーダル */}
           <div
-            className="relative z-10 mx-4 w-full max-w-md rounded-lg bg-white p-5"
+            className="relative z-10 mx-4 w-full max-w-xl rounded-lg bg-white p-5"
             ref={elRef}
           >
             <div className="mb-4 rounded-lg border p-2">
@@ -183,6 +181,15 @@ export default function ResultScreen({
                 className="w-full resize-none overflow-hidden border-none p-2 outline-none"
                 placeholder="あなたの素敵なアイディアを保存しよう"
               />
+              <div className="rounded-sm border-1 bg-slate-50 p-2">
+                <h3 className="mb-2 text-sm font-bold">
+                  このセッションの雰囲気
+                </h3>
+                <MoodDisplay
+                  selectedMoods={selectedMoods}
+                  onDeleteMoodType={onDeleteMood}
+                />
+              </div>
             </div>
 
             {/* ボタン */}
@@ -210,24 +217,26 @@ export default function ResultScreen({
 
       <ScreenWrapper>
         {/* タイトル */}
-        <div className="mb-4 text-center">
-          <h2 className="mb-2 text-5xl font-bold text-gray-900">
-            選んだバナー
-          </h2>
-          <p className="text-lg">あなたの素晴らしいデザインセンスです</p>
-        </div>
+        <TitleText
+          mainText={'選んだバナー'}
+          subText={'あなたの素晴らしいデザインセンスです'}
+        />
         {/* 雰囲気表示 */}
-        <div className="mb-3">
-          <MoodDisplay selectedMoods={selectedMoods} onDeleteMoodType={onDeleteMood}/>
+        <div className="mb-6">
+          <div className="mx-auto w-fit">
+            <MoodDisplay
+              selectedMoods={selectedMoods}
+              onDeleteMoodType={onDeleteMood}
+            />
+          </div>
         </div>
 
         {/* 画像表示 */}
-        <div className="max-h-[600px] overflow-y-auto">
-          <div className="grid grid-cols-2 gap-4 bg-white p-4 md:grid-cols-3">
+        <div className="mb-6 max-h-[600px] overflow-y-auto">
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
             {results
               .filter((result) => result.choice === 'like')
               .map((result, index) => {
-                // 👆 ここが変更点：オブジェクトから状態を取得
                 const imageState = imageStates[index] || {
                   width: 0,
                   height: 0,
@@ -235,21 +244,38 @@ export default function ResultScreen({
                 };
 
                 return (
-                  <div key={index} className="shadow-lg">
-                    <div className="flex aspect-square flex-col items-center justify-center p-2">
+                  <div key={index} className="bg-white p-2">
+                    <div className="flex aspect-square flex-col items-center justify-center p-1">
                       <img
                         src={result.image}
                         alt={`好きな画像 ${index + 1}`}
-                        className={`object-cover ${imageState.size}`}
+                        className={`object-cover ${imageState.size} shadow-sm`}
                         onLoad={(e) => handleImageLoad(e, index)}
                         onError={(e) => {
                           e.target.src = '/test01.jpg';
                         }}
                       />
                     </div>
-                    <p className="w-full bg-white py-2 text-center text-lg">
-                      {imageState.width}×{imageState.height}
-                    </p>
+                    <div className="w-full border-t-1 border-t-slate-200 bg-white py-2 text-center">
+                      <p className="text-lg">
+                        {imageState.width}×{imageState.height}
+                        <p className="text-sm">
+                          (縦横比：
+                          {imageState.width / imageState.height === 1 ? (
+                            <span className="text-green-500">正方形</span>
+                          ) : imageState.width / imageState.height > 1 ? (
+                            <span>
+                              <span className="text-blue-500">横</span>型
+                            </span>
+                          ) : (
+                            <span>
+                              <span className="text-red-500">縦</span>型
+                            </span>
+                          )}
+                          )
+                        </p>
+                      </p>
+                    </div>
                   </div>
                 );
               })}
@@ -257,7 +283,7 @@ export default function ResultScreen({
         </div>
 
         {/* ボタン */}
-        <div className="m-auto mt-6 max-w-2xl">
+        <div className="w-full">
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
             <Button onClick={openModal} variant="primary">
               保存する
