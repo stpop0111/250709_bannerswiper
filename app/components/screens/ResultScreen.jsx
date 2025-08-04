@@ -245,7 +245,7 @@ export default function ResultScreen({
 
                 return (
                   <div key={index} className="bg-white p-2">
-                    <div className="flex aspect-square flex-col items-center justify-center p-1">
+                    <div className="flex aspect-square flex-col items-center justify-center p-2">
                       <img
                         src={result.image}
                         alt={`好きな画像 ${index + 1}`}

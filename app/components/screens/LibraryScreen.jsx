@@ -9,7 +9,7 @@ import gsap from 'gsap';
 export default function LibraryScreen({ onNavigate }) {
   const [selectedSession, setSelectedSession] = useState(null); // 選択済みセッションの状態管理
   const [deleteSession, setDeleteSession] = useState(null); // 選択したセッションの削除
-  const [savedSessions, setsavedSessions] = useState([]); // セッション一覧の管理
+  const [savedSessions, setSavedSessions] = useState([]); // セッション一覧の管理
   const [imageStates, setImageStates] = useState({});
 
   // 画像読み込み時の処理
@@ -40,10 +40,10 @@ export default function LibraryScreen({ onNavigate }) {
       const stored = localStorage.getItem('bannerSessions');
       if (stored) {
         const sessions = JSON.parse(stored);
-        setsavedSessions(Array.isArray(sessions) ? sessions : []);
+        setSavedSessions(Array.isArray(sessions) ? sessions : []);
       }
     } catch (error) {
-      setsavedSessions([]);
+      setSavedSessions([]);
     }
   };
 
@@ -52,7 +52,7 @@ export default function LibraryScreen({ onNavigate }) {
   const deleteAllSessions = () => {
     try {
       localStorage.removeItem('bannerSessions');
-      setsavedSessions([]);
+      setSavedSessions([]);
       alert('すべてのデータを削除しました');
     } catch (error) {
       alert('削除に失敗しました');
@@ -87,28 +87,28 @@ export default function LibraryScreen({ onNavigate }) {
   }, [deleteSession]);
 
   // モダールウィンドウ表示
-  const openModal = (e,deleteSession) => {
+  const openModal = (e, deleteSession) => {
     e.stopPropagation();
     setDeleteSession(deleteSession);
   };
   // モダールウィンドウ非表示
   const closeModal = () => {
-    setDeleteSession(null)
+    setDeleteSession(null);
   };
 
   // 削除関数
   const handleDelete = () => {
     try {
       const updatedSessions = savedSessions.filter(
-        session => session.id !== deleteSession.id
+        (session) => session.id !== deleteSession.id
       );
       localStorage.setItem('bannerSessions', JSON.stringify(updatedSessions));
       closeModal();
-      setsavedSessions(updatedSessions)
+      setSavedSessions(updatedSessions);
     } catch (error) {
       alert('削除できませんでした');
     }
-  }
+  };
 
   // セッションの選択
   const selectSession = (session) => {
@@ -168,7 +168,7 @@ export default function LibraryScreen({ onNavigate }) {
           </div>
         </div>
       )}
-      
+
       {/* 詳細表示 */}
       {selectedSession ? (
         <>
@@ -179,8 +179,8 @@ export default function LibraryScreen({ onNavigate }) {
                 作成日：
                 ${new Date(selectedSession.createdAt).toLocaleDateString()}`}
           />
-          <div className="mb-4 w-full">
-            <div className="mx-auto w-fit rounded-lg border border-blue-200 bg-blue-50 p-3">
+          <div className="mb-4">
+            <div className="mx-auto w-fit">
               <MoodDisplay
                 selectedMoods={selectedSession.selectedMoods}
                 readOnly={true}
@@ -194,7 +194,6 @@ export default function LibraryScreen({ onNavigate }) {
               {selectedSession.results
                 .filter((result) => result.choice === 'like')
                 .map((result, index) => {
-                  // 👆 ここが変更点：オブジェクトから状態を取得
                   const imageState = imageStates[index] || {
                     width: 0,
                     height: 0,
@@ -255,13 +254,12 @@ export default function LibraryScreen({ onNavigate }) {
                 {savedSessions.map((session) => (
                   <div
                     key={session.id}
-                    className="relative cursor-pointer rounded-lg border p-4"
+                    className="group relative cursor-pointer rounded-lg border border-slate-300 bg-slate-100 p-2 transition-all hover:border-slate-400 hover:bg-slate-50"
                     onClick={() => selectSession(session)}
                   >
-                    <h3 className="mb-2 text-lg font-bold">{session.name}</h3>{' '}
+                    <h3 className="mb-2 text-lg font-bold">{session.name}</h3>
                     {/* タイトル */}
                     <p className="mb-2 text-sm text-gray-800">
-                      {' '}
                       {/* 作成日 */}
                       作成日：
                       {new Date(session.createdAt).toLocaleDateString()}
@@ -271,7 +269,12 @@ export default function LibraryScreen({ onNavigate }) {
                       readOnly={true}
                     />
                     <div className="absolute -top-3 -left-3">
-                      <CloseButton onClick={(e) => openModal(e,session)} />
+                      <CloseButton
+                        onClick={(e) => openModal(e, session)}
+                        addClass={
+                          'transition-all duration-200 md:opacity-0 md:scale-90 md:group-hover:opacity-100 md:group-hover:scale-100 opacity-100 scale-100'
+                        }
+                      />
                     </div>
                   </div>
                 ))}

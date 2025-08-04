@@ -1,8 +1,8 @@
-export function CloseButton({ color, onClick }) {
+export function CloseButton({ color, onClick, addClass }) {
   return (
     <span
       onClick={onClick}
-      className={`flex aspect-square h-full cursor-pointer items-center justify-center rounded-full border bg-white p-1 border-${color}`}
+      className={`flex aspect-square h-full cursor-pointer items-center justify-center rounded-full border bg-white p-1 border-${color} ${addClass}`}
     >
       <svg
         className={`h-full max-h-4 w-full max-w-4`}
