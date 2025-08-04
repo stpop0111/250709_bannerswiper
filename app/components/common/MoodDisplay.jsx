@@ -1,7 +1,6 @@
 import { moodOptions, axisLabels } from '../../data/options';
 
 export default function MoodDisplay({ selectedMoods }) {
-  
   const getMood = (axis, id) => {
     if (!id) {
       return null;
@@ -17,21 +16,21 @@ export default function MoodDisplay({ selectedMoods }) {
   }
 
   return (
-    <div className='p-3 bg-blue-50 rounded-lg border border-blue-200'>
-      <div className='text-center'>
-        <div className='flex flex-wrap gap-2 text-xs'>
+    <div className="rounded-lg border border-blue-200 bg-blue-50 p-3">
+      <div className="text-center">
+        <div className="flex flex-wrap gap-2 text-xs">
           {selectedMoods.category && (
-            <span className='bg-white px-2 py-1 rounded border text-blue-700'>
+            <span className="rounded border bg-white px-2 py-1 text-blue-700">
               {getMood('category', selectedMoods.category)}
             </span>
           )}
           {selectedMoods.taste && (
-            <span className='bg-white px-2 py-1 rounded border text-green-700'>
+            <span className="rounded border bg-white px-2 py-1 text-green-700">
               {getMood('taste', selectedMoods.taste)}
             </span>
           )}
           {selectedMoods.color && (
-            <span className='bg-white px-2 py-1 rounded border text-red-700'>
+            <span className="rounded border bg-white px-2 py-1 text-red-700">
               {getMood('color', selectedMoods.color)}
             </span>
           )}

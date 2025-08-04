@@ -4,10 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function FadeTransition({
-  children,
-  animationKey,
-}) {
+export default function FadeTransition({ children, animationKey }) {
   const elRef = useRef(null);
 
   useEffect(() => {

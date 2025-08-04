@@ -2,6 +2,8 @@
 
 import Button from '../common/Button';
 import MoodDisplay from '../common/MoodDisplay';
+import TitleText from '../common/TitleText';
+
 import { aspectCalc } from '../../utils/aspectCalc';
 import gsap from 'gsap';
 import { useState, useEffect, useRef } from 'react';
@@ -117,23 +119,20 @@ export default function ResultScreen({
 
   if (results.filter((result) => result.choice === 'like').length === 0) {
     return (
-      <div className='min-h-screen flex items-center justify-center p-2'>
-        <div className='w-full max-w-2xl mx-auto my-auto'>
+      <div className="flex min-h-screen items-center justify-center p-2">
+        <div className="mx-auto my-auto w-full max-w-2xl">
           {/* タイトル */}
-          <div className='text-center mb-4'>
-            <h2 className='text-5xl font-bold text-gray-900 mb-2'>
-              選んだバナーがありません
-            </h2>
-            <p className='text-lg'>あれ？全部イマイチだったかな？</p>
-          </div>
-
+          <TitleText
+            mainText={'選んだバナーがありません'}
+            subText={'あれ？全部イマイチだったかな？'}
+          />
           {/* ボタン */}
-          <div className='max-w-2xl m-auto mt-6'>
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
-              <Button onClick={() => onNavigate('input')} variant='primary'>
+          <div className="m-auto mt-6 max-w-2xl">
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+              <Button onClick={() => onNavigate('input')} variant="primary">
                 入力に戻る
               </Button>
-              <Button onClick={() => onNavigate('library')} variant='optional'>
+              <Button onClick={() => onNavigate('library')} variant="optional">
                 ライブラリーを見る
               </Button>
             </div>
@@ -144,49 +143,49 @@ export default function ResultScreen({
   }
 
   return (
-    <div className='min-h-screen flex items-center justify-center p-2'>
-      <div className='w-full max-w-5xl mx-auto my-auto'>
+    <div className="flex min-h-screen items-center justify-center p-2">
+      <div className="mx-auto my-auto w-full max-w-5xl">
         {/* モーダルウィンドウの表示 */}
         {saveSession && (
-          <div className='fixed inset-0 z-50 flex justify-center items-center'>
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
             {/* 背景 */}
             <div
-              className='absolute inset-0 w-screen h-full bg-black opacity-50'
+              className="absolute inset-0 h-full w-screen bg-black opacity-50"
               onClick={closeModal}
             ></div>
 
             {/* モーダル */}
             <div
-              className='bg-white rounded-lg p-5 w-full max-w-md mx-4 relative z-10'
+              className="relative z-10 mx-4 w-full max-w-md rounded-lg bg-white p-5"
               ref={elRef}
             >
-              <div className='border rounded-lg p-2 mb-4'>
-                <h3 className='text-lg font-bold '>セッション名を保存</h3>
+              <div className="mb-4 rounded-lg border p-2">
+                <h3 className="text-lg font-bold">セッション名を保存</h3>
                 {/* 名前入力欄 */}
                 <input
-                  type='text'
+                  type="text"
                   value={sessionName}
                   onChange={(e) => setSessionName(e.target.value)}
-                  className='w-full p-2 resize-none overflow-hidden border-none outline-none'
-                  placeholder='あなたの素敵なアイディアを保存しよう'
+                  className="w-full resize-none overflow-hidden border-none p-2 outline-none"
+                  placeholder="あなたの素敵なアイディアを保存しよう"
                 />
               </div>
 
               {/* ボタン */}
-              <div className='flex gap-2'>
+              <div className="flex gap-2">
                 <Button
                   onClick={closeModal}
-                  variant='optional'
+                  variant="optional"
                   animation={false}
-                  buttonWidth='full'
+                  buttonWidth="full"
                 >
                   キャンセル
                 </Button>
                 <Button
                   onClick={handleSave}
-                  variant='primary'
+                  variant="primary"
                   animation={false}
-                  buttonWidth='full'
+                  buttonWidth="full"
                 >
                   保存
                 </Button>
@@ -196,25 +195,25 @@ export default function ResultScreen({
         )}
 
         {/* タイトル */}
-        <div className='text-center mb-4'>
-          <h2 className='text-5xl font-bold text-gray-900 mb-2'>
+        <div className="mb-4 text-center">
+          <h2 className="mb-2 text-5xl font-bold text-gray-900">
             選んだバナー
           </h2>
-          <p className='text-lg'>あなたの素晴らしいデザインセンスです</p>
+          <p className="text-lg">あなたの素晴らしいデザインセンスです</p>
         </div>
         {/* 雰囲気表示 */}
         <div className="mb-3">
           <MoodDisplay selectedMoods={selectedMoods} />
         </div>
         {/* 画像表示 */}
-        <div className='max-h-[300px] overflow-y-auto'>
-          <div className='grid grid-cols-2 p-2 gap-2 md:grid-cols-4'>
+        <div className="max-h-[300px] overflow-y-auto">
+          <div className="grid grid-cols-2 gap-2 p-2 md:grid-cols-4">
             {results
               .filter((result) => result.choice === 'like')
               .map((result, index) => (
                 <div
                   key={index}
-                  className='p-4 bg-slate-200 w-full aspect-square flex justify-center items-center'
+                  className="flex aspect-square w-full items-center justify-center bg-slate-200 p-4"
                 >
                   <img
                     src={result.image}
@@ -231,12 +230,12 @@ export default function ResultScreen({
         </div>
 
         {/* ボタン */}
-        <div className='max-w-2xl m-auto mt-6'>
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
-            <Button onClick={openModal} variant='primary'>
+        <div className="m-auto mt-6 max-w-2xl">
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+            <Button onClick={openModal} variant="primary">
               保存する
             </Button>
-            <Button onClick={() => onNavigate('input')} variant='optional'>
+            <Button onClick={() => onNavigate('input')} variant="optional">
               入力に戻る
             </Button>
           </div>

@@ -2,15 +2,15 @@ export default function TitleText({ mainText, subText }) {
   return (
     <>
       {/* タイトル */}
-      <div className='text-center mb-4'>
+      <div className="mb-4 text-center">
         <h2
-          className={`text-2xl md:text-5xl font-bold text-gray-900 ${
+          className={`text-2xl font-bold text-gray-900 md:text-5xl ${
             subText ? 'mb-2' : ''
           }`}
         >
           {mainText}
         </h2>
-        {subText && <p className='text-lg'>{subText}</p>}
+        {subText && <p className="text-lg">{subText}</p>}
       </div>
     </>
   );

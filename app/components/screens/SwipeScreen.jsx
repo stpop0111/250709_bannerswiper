@@ -140,10 +140,10 @@ export default function SwipeScreen({
 
   if (!images || images.length === 0) {
     return (
-      <div className='min-h-screen flex items-center justify-center p-2'>
-        <div className='text-center'>
-          <p className='text-xl text-gray-600 mb-4'>画像がありません</p>
-          <Button onClick={() => onNavigate('input')} variant='optional'>
+      <div className="flex min-h-screen items-center justify-center p-2">
+        <div className="text-center">
+          <p className="mb-4 text-xl text-gray-600">画像がありません</p>
+          <Button onClick={() => onNavigate('input')} variant="optional">
             入力に戻る
           </Button>
         </div>
@@ -152,21 +152,21 @@ export default function SwipeScreen({
   }
 
   return (
-    <div className='min-h-screen flex items-center justify-center p-2'>
-      <div className='w-full max-w-2xl mx-auto my-auto'>
+    <div className="flex min-h-screen items-center justify-center p-2">
+      <div className="mx-auto my-auto w-full max-w-2xl">
         <TitleText mainText={'あなたの好きなバナーはあるかな？'} />
         {/* 選択した雰囲気 */}
         <MoodDisplay selectedMoods={selectedMoods} />
         {/* 進捗 */}
-        <div className='text-center mb-2'>
-          <p className='text-gray-600 font-bold'>
-            <span className='text-xl'>{currentIndex + 1}</span> /
-            <span className='text-red-400'>{images.length}</span>
+        <div className="mb-2 text-center">
+          <p className="font-bold text-gray-600">
+            <span className="text-xl">{currentIndex + 1}</span> /
+            <span className="text-red-400">{images.length}</span>
           </p>
         </div>
         {/* 画像表示エリア */}
-        <div className='mb-6 flex items-center justify-center'>
-          <div className='p-4 bg-slate-200 h-[50vh] aspect-square flex justify-center items-center'>
+        <div className="mb-6 flex items-center justify-center">
+          <div className="flex aspect-square h-[50vh] items-center justify-center bg-slate-200 p-4">
             <img
               ref={imageRef}
               src={images[currentIndex]}
@@ -181,35 +181,35 @@ export default function SwipeScreen({
           </div>
         </div>
         {/* ボタン */}
-        <div className='m-auto top-[100%]'>
-          <div className='flex gap-3 justify-center mb-4'>
+        <div className="top-[100%] m-auto">
+          <div className="mb-4 flex justify-center gap-3">
             <Button
               onClick={() => animateChoice('disLike', 'left')}
-              variant='dislike'
+              variant="dislike"
             >
               ✖
             </Button>
             <Button
               onClick={() => animateChoice('like', 'right')}
-              variant='like'
+              variant="like"
             >
               ❤
             </Button>
           </div>
 
           {/* オプショナルボタン */}
-          <div className='flex gap-3 justify-center mt-6'>
+          <div className="mt-6 flex justify-center gap-3">
             <Button
               onClick={() => onNavigate('input')}
-              variant='optional'
-              buttonWidth='full'
+              variant="optional"
+              buttonWidth="full"
             >
               入力に戻る
             </Button>
             <Button
               onClick={previousImage}
-              variant='primary'
-              buttonWidth='full'
+              variant="primary"
+              buttonWidth="full"
             >
               ひとつ戻る({results.length}個を選択済み)
             </Button>

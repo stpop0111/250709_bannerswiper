@@ -1,6 +1,7 @@
-import Button from '../common/Button';
 import { useState, useEffect, useRef } from 'react';
 import LoadingScreen from './LoadingScreen';
+import TitleText from '../common/TitleText';
+import Button from '../common/Button';
 import { validateImages, getValidImages } from '../../utils/imageValidar';
 import { moodOptions, axisLabels } from '../../data/options';
 
@@ -85,32 +86,27 @@ export default function InputScreen({ onNavigate, onComplete }) {
   }
 
   return (
-    <div className='min-h-screen flex items-center justify-center p-2'>
-      <div className='w-full max-w-2xl mx-auto my-auto'>
+    <div className="flex min-h-screen items-center justify-center p-2">
+      <div className="mx-auto my-auto w-full max-w-2xl">
         {/* タイトル */}
-        <div className='text-center mb-4'>
-          <h2 className='text-5xl font-bold text-gray-900 mb-2'>
-            探求に行きましょう。
-          </h2>
-          <p>画像URLを入力するか、インポートする形式を選んでください。</p>
-        </div>
+        <TitleText mainText={'デザインを探索'} />
 
         {/* 雰囲気選択 */}
-        <div className='mb-4'>
-          <div className='p-4 border bg-white border-gray-400 rounded-lg'>
-            <h3 className='text-lg font-bold mb-4'>雰囲気を選択してください</h3>
-            <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
+        <div className="mb-4">
+          <div className="rounded-lg border border-gray-400 bg-white p-4">
+            <h3 className="mb-4 text-lg font-bold">雰囲気を選択してください</h3>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
               <div>
                 {/* カテゴリー */}
-                <label className='block text-sm font-semibold mb-2'>
+                <label className="mb-2 block text-sm font-semibold">
                   {axisLabels.category}
                 </label>
                 <select
                   value={selectMood.category}
                   onChange={(e) => handleSelectMood('category', e.target.value)}
-                  className='w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-600'
+                  className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
                 >
-                  <option value=''>選択してください</option>
+                  <option value="">選択してください</option>
                   {moodOptions.category.map((option) => (
                     <option key={option.id} value={option.id}>
                       {option.label}
@@ -120,15 +116,15 @@ export default function InputScreen({ onNavigate, onComplete }) {
               </div>
               <div>
                 {/* テイスト */}
-                <label className='block text-sm font-semibold mb-2'>
+                <label className="mb-2 block text-sm font-semibold">
                   {axisLabels.taste}
                 </label>
                 <select
                   value={selectMood.taste}
                   onChange={(e) => handleSelectMood('taste', e.target.value)}
-                  className='w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-600'
+                  className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
                 >
-                  <option value=''>選択してください</option>
+                  <option value="">選択してください</option>
                   {moodOptions.taste.map((option) => (
                     <option key={option.id} value={option.id}>
                       {option.label}
@@ -138,15 +134,15 @@ export default function InputScreen({ onNavigate, onComplete }) {
               </div>
               <div>
                 {/* 色 */}
-                <label className='block text-sm font-semibold mb-2'>
+                <label className="mb-2 block text-sm font-semibold">
                   {axisLabels.color}
                 </label>
                 <select
                   value={selectMood.color}
                   onChange={(e) => handleSelectMood('color', e.target.value)}
-                  className='w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-600'
+                  className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
                 >
-                  <option value=''>選択してください</option>
+                  <option value="">選択してください</option>
                   {moodOptions.color.map((option) => (
                     <option key={option.id} value={option.id}>
                       {option.label}
@@ -159,7 +155,7 @@ export default function InputScreen({ onNavigate, onComplete }) {
         </div>
 
         {/* 入力エリア */}
-        <div className='mb-6 p-4 border bg-white border-gray-300 rounded-lg '>
+        <div className="mb-6 rounded-lg border border-gray-300 bg-white p-4">
           <textarea
             value={inputUrls}
             placeholder={`画像URLを入力：
@@ -167,7 +163,7 @@ https://example.com/image1.jpg
 https://example.com/image2.jpg
 https://example.com/image3.jpg
       `}
-            className='w-full min-h-[120px] max-h-[400px] resize-none overflow-hidden border-none outline-none'
+            className="max-h-[400px] min-h-[120px] w-full resize-none overflow-hidden border-none outline-none"
             onChange={(e) => setInputUrls(e.target.value)}
             onError={(e) => {
               e.target.src = '/test01.jpg';
@@ -179,22 +175,22 @@ https://example.com/image3.jpg
           />
 
           {/* ボタン */}
-          <div className='flex justify-between items-end w-full'>
-            <button className='w-8 h-8 border-1 border-gray-600 rounded-lg'>
+          <div className="flex w-full items-end justify-between">
+            <button className="h-8 w-8 rounded-lg border-1 border-gray-600">
               +
             </button>
-            <Button onClick={handleUrlSubmit} variant='primary'>
+            <Button onClick={handleUrlSubmit} variant="primary">
               スワイプ開始！
             </Button>
           </div>
         </div>
 
         {/* タイトルに戻るボタン */}
-        <div className='w-full'>
+        <div className="w-full">
           <Button
             onClick={() => onNavigate('title')}
-            variant='optional'
-            buttonWidth='full'
+            variant="optional"
+            buttonWidth="full"
           >
             タイトルに戻る
           </Button>

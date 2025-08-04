@@ -14,7 +14,7 @@ export default function Home() {
   const [mode, setMode] = useState('title'); //画面モードの状態管理
   const [images, setImages] = useState([]); // 画像の配列
   const [results, setResults] = useState([]); // スワイプ結果
-  const [selectedMoods, setSelectedMoods] = useState({}) // 選択した雰囲気
+  const [selectedMoods, setSelectedMoods] = useState({}); // 選択した雰囲気
 
   // 画面の表示切替
   // =======================================
@@ -33,34 +33,29 @@ export default function Home() {
   // =======================================
   const handleSwipeComplete = (swipeResults, moods) => {
     setResults(swipeResults);
-    setSelectedMoods(moods)
+    setSelectedMoods(moods);
     changeScreen('result');
-  }
+  };
 
   // InputScreen.jsx -> URLの記入完了時
   // =======================================
   const handleInputComplete = (inputUrls, moods) => {
     setImages(inputUrls);
-    setSelectedMoods(moods)
+    setSelectedMoods(moods);
     setResults([]);
     changeScreen('swipe');
-  }
+  };
 
   return (
-    <div className='min-h-screen bg-gray-100 overflow-hidden'>
+    <div className="min-h-screen overflow-hidden bg-gray-100">
       {/* タイトル画面 */}
       <FadeTransition animationKey={mode}>
-        {mode === 'title' && (
-          <TitleScreen
-            onNavigate={changeScreen}
-          />
-        )}
+        {mode === 'title' && <TitleScreen onNavigate={changeScreen} />}
         {/* URL入力画面 */}
         {mode === 'input' && (
           <InputScreen
             onComplete={handleInputComplete}
             onNavigate={changeScreen}
-          
           />
         )}
         {/* スワイプモード */}
@@ -82,11 +77,7 @@ export default function Home() {
           />
         )}
         {/* ライブラリー */}
-        {mode === 'library' && (
-          <LibraryScreen
-            onNavigate={changeScreen}
-          />
-        )}
+        {mode === 'library' && <LibraryScreen onNavigate={changeScreen} />}
       </FadeTransition>
     </div>
   );

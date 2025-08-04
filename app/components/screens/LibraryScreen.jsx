@@ -1,5 +1,6 @@
 import Button from '../common/Button';
 import MoodDisplay from '../common/MoodDisplay';
+import TitleText from '../common/TitleText';
 import { useState, useEffect, useRef } from 'react';
 
 export default function LibraryScreen({ onNavigate }) {
@@ -48,29 +49,25 @@ export default function LibraryScreen({ onNavigate }) {
   }, []);
 
   return (
-    <div className='min-h-screen flex items-center justify-center p-2'>
-      <div className='w-full max-w-2xl mx-auto my-auto'>
+    <div className="flex min-h-screen items-center justify-center p-2">
+      <div className="mx-auto my-auto w-full max-w-2xl">
         {/* 詳細表示 */}
         {selectedSession ? (
           <>
             {/* タイトル */}
-            <div className='text-center mb-4'>
-              <h2 className='text-5xl font-bold text-gray-900 mb-2'>
-                {selectedSession.name}
-              </h2>
-              <p className='text-lg'>
+            <TitleText
+              mainText={selectedSession.name}
+              subText={`
                 作成日：
-                {new Date(selectedSession.createdAt).toLocaleDateString()}
-              </p>
-              <div className="mt-3">
-                <MoodDisplay selectedMoods={selectedSession.selectedMoods} />
-              </div>
-
+                ${new Date(selectedSession.createdAt).toLocaleDateString()}`}
+            />
+            <div className="mt-3">
+              <MoodDisplay selectedMoods={selectedSession.selectedMoods} />
             </div>
 
             {/* 画像表示 */}
-            <div className='bg-white rounded-lg p-4'>
-              <div className='grid grid-cols-4 gap-4'>
+            <div className="rounded-lg bg-white p-4">
+              <div className="grid grid-cols-4 gap-4">
                 {selectedSession.results
                   .filter((result) => result.choice === 'like')
                   .map((result, index) => (
@@ -78,7 +75,7 @@ export default function LibraryScreen({ onNavigate }) {
                       <img
                         src={result.image}
                         alt={`好きな画像 ${index + 1}`}
-                        className='w-full object-cover'
+                        className="w-full object-cover"
                       />
                     </div>
                   ))}
@@ -86,12 +83,12 @@ export default function LibraryScreen({ onNavigate }) {
             </div>
 
             {/* ボタン */}
-            <div className='mt-6 w-full mx-auto'>
-              <div className=''>
+            <div className="mx-auto mt-6 w-full">
+              <div className="">
                 <Button
                   onClick={backToList}
-                  variant='optional'
-                  buttonWidth='full'
+                  variant="optional"
+                  buttonWidth="full"
                 >
                   リストに戻る
                 </Button>
@@ -101,30 +98,28 @@ export default function LibraryScreen({ onNavigate }) {
         ) : (
           <>
             {/* タイトル */}
-            <div className='text-center mb-4'>
-              <h2 className='text-5xl font-bold text-gray-900 mb-2'>
-                選んだバナー
-              </h2>
-              <p className='text-lg'>あなたの素晴らしいデザインセンスです</p>
-            </div>
+            <TitleText
+              mainText={'選んだバナー'}
+              subText={'あなたの素晴らしいデザインセンスです'}
+            />
 
             {/* 一覧 */}
-            <div className='bg-white p-4'>
+            <div className="bg-white p-4">
               {!savedSessions || savedSessions.length === 0 ? (
-                <p className='text-center text-gray-500'>
+                <p className="text-center text-gray-500">
                   まだ保存されたセッションがありません。
                 </p>
               ) : (
-                <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                   {savedSessions.map((session) => (
                     <div
                       key={session.id}
-                      className='cursor-pointer border rounded-lg p-4'
+                      className="cursor-pointer rounded-lg border p-4"
                       onClick={() => selectSession(session)}
                     >
-                      <h3 className='font-bold text-lg mb-2'>{session.name}</h3>{' '}
+                      <h3 className="mb-2 text-lg font-bold">{session.name}</h3>{' '}
                       {/* タイトル */}
-                      <p className='text-sm text-gray-800 mb-2'>
+                      <p className="mb-2 text-sm text-gray-800">
                         {' '}
                         {/* 作成日 */}
                         作成日：
@@ -138,19 +133,19 @@ export default function LibraryScreen({ onNavigate }) {
             </div>
 
             {/* ボタン */}
-            <div className='mt-6 w-full mx-auto'>
-              <div className='grid grid-cols-1 md:grid-cols-2 gap-3 mb-4'>
-                <Button onClick={() => onNavigate('input')} variant='primary'>
+            <div className="mx-auto mt-6 w-full">
+              <div className="mb-4 grid grid-cols-1 gap-3 md:grid-cols-2">
+                <Button onClick={() => onNavigate('input')} variant="primary">
                   デザインを探索する
                 </Button>
-                <Button onClick={() => onNavigate('title')} variant='optional'>
+                <Button onClick={() => onNavigate('title')} variant="optional">
                   タイトルに戻る
                 </Button>
               </div>
               <Button
                 onClick={deleteAllSessions}
-                variant='dislike'
-                buttonWidth='full'
+                variant="dislike"
+                buttonWidth="full"
               >
                 すべて削除する
               </Button>

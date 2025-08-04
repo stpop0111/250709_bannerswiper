@@ -8,7 +8,10 @@
     "start": "next start",
     "lint": "next lint --fix",
     "lint:check": "next lint",
-    "lint:fix": "next lint --fix"
+    "lint:fix": "next lint --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "format:jsx": "prettier --write \"**/*.{js,jsx}\""
   },
   "dependencies": {
     "gsap": "^3.13.0",
@@ -23,6 +26,8 @@
     "eslint-config-next": "15.3.5",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-react": "^7.37.5",
+    "prettier": "^3.6.2",
+    "prettier-plugin-tailwindcss": "^0.6.14",
     "tailwindcss": "^4"
   }
 }
