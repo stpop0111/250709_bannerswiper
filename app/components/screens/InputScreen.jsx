@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import LoadingScreen from './LoadingScreen';
 import TitleText from '../common/TitleText';
 import Button from '../common/Button';
+import ScreenWrapper from '../common/ScreenWrapper';
 import { validateImages, getValidImages } from '../../utils/imageValidar';
 import { moodOptions, axisLabels } from '../../data/options';
 
@@ -86,8 +87,7 @@ export default function InputScreen({ onNavigate, onComplete }) {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-2">
-      <div className="mx-auto my-auto w-full max-w-2xl">
+    <ScreenWrapper>
         {/* タイトル */}
         <TitleText mainText={'デザインを探索'} />
 
@@ -195,7 +195,6 @@ https://example.com/image3.jpg
             タイトルに戻る
           </Button>
         </div>
-      </div>
-    </div>
+    </ScreenWrapper>
   );
 }

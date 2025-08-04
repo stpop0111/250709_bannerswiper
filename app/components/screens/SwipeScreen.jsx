@@ -1,6 +1,7 @@
 import Button from '../common/Button';
 import MoodDisplay from '../common/MoodDisplay';
 import TitleText from '../common/TitleText';
+import ScreenWrapper from '../common/ScreenWrapper';
 
 import { aspectCalc } from '../../utils/aspectCalc';
 import { useState, useEffect, useRef } from 'react';
@@ -19,13 +20,9 @@ export default function SwipeScreen({
   const [currentIndex, setCurrentIndex] = useState(0); // 現在の画像番号
   const [results, setResults] = useState([]); // 判定結果の保存
   const imageRef = useRef(null); // 画像要素の直接参照
-  const [imageSize, setImageSize] = useState('w-full');
-
-  // 画像のアスペクト比計算(外部JS連携)
-  // =======================================
-  const handleImageLoad = (e) => {
-    aspectCalc(e, setImageSize);
-  };
+  const [imageSize, setImageSize] = useState('w-full'); // 画像サイズ
+  const [imageWidth, setImageWidth] = useState(0); // 画像の幅
+  const [imageHeight, setImageHeight] = useState(0); // 画像の高さ
 
   // スワイプの処理
   // =======================================
@@ -140,82 +137,80 @@ export default function SwipeScreen({
 
   if (!images || images.length === 0) {
     return (
-      <div className="flex min-h-screen items-center justify-center p-2">
+      <ScreenWrapper>
         <div className="text-center">
           <p className="mb-4 text-xl text-gray-600">画像がありません</p>
           <Button onClick={() => onNavigate('input')} variant="optional">
             入力に戻る
           </Button>
         </div>
-      </div>
+      </ScreenWrapper>
     );
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-2">
-      <div className="mx-auto my-auto w-full max-w-2xl">
-        <TitleText mainText={'あなたの好きなバナーはあるかな？'} />
-        {/* 選択した雰囲気 */}
-        <MoodDisplay selectedMoods={selectedMoods} />
-        {/* 進捗 */}
-        <div className="mb-2 text-center">
-          <p className="font-bold text-gray-600">
-            <span className="text-xl">{currentIndex + 1}</span> /
-            <span className="text-red-400">{images.length}</span>
-          </p>
+    <ScreenWrapper>
+      <TitleText mainText={'あなたの好きなバナーはあるかな？'} />
+      {/* 選択した雰囲気 */}
+      <MoodDisplay selectedMoods={selectedMoods} />
+      {/* 進捗 */}
+      <div className="mb-2 text-center">
+        <p className="font-bold text-gray-600">
+          <span className="text-xl">{currentIndex + 1}</span> /
+          <span className="text-red-400">{images.length}</span>
+        </p>
+      </div>
+      {/* 画像表示エリア */}
+      <div className="mb-6 flex flex-col items-center justify-center">
+        <div className="mb-2 flex aspect-square h-[50vh] flex-col items-center justify-center">
+          <img
+            ref={imageRef}
+            src={images[currentIndex]}
+            alt={`image ${currentIndex + 1}`}
+            className={`object-cover shadow-lg ${imageSize}`}
+            style={{ touchAction: 'none' }}
+            onLoad={(e) => {
+              setImageWidth(e.target.naturalWidth);
+              setImageHeight(e.target.naturalHeight);
+              aspectCalc(e, setImageSize);
+            }}
+            onError={(e) => {
+              e.target.src = '/test01.jpg';
+            }}
+          />
         </div>
-        {/* 画像表示エリア */}
-        <div className="mb-6 flex items-center justify-center">
-          <div className="flex aspect-square h-[50vh] items-center justify-center bg-slate-200 p-4">
-            <img
-              ref={imageRef}
-              src={images[currentIndex]}
-              alt={`image ${currentIndex + 1}`}
-              className={`object-cover shadow-lg ${imageSize}`}
-              style={{ touchAction: 'none' }}
-              onLoad={handleImageLoad}
-              onError={(e) => {
-                e.target.src = '/test01.jpg';
-              }}
-            />
-          </div>
+        <p className="text-center text-lg">
+          {imageWidth}×{imageHeight}
+        </p>
+      </div>
+      {/* ボタン */}
+      <div className="top-[100%] m-auto">
+        <div className="mb-4 flex justify-center gap-3">
+          <Button
+            onClick={() => animateChoice('disLike', 'left')}
+            variant="dislike"
+          >
+            ✖
+          </Button>
+          <Button onClick={() => animateChoice('like', 'right')} variant="like">
+            ❤
+          </Button>
         </div>
-        {/* ボタン */}
-        <div className="top-[100%] m-auto">
-          <div className="mb-4 flex justify-center gap-3">
-            <Button
-              onClick={() => animateChoice('disLike', 'left')}
-              variant="dislike"
-            >
-              ✖
-            </Button>
-            <Button
-              onClick={() => animateChoice('like', 'right')}
-              variant="like"
-            >
-              ❤
-            </Button>
-          </div>
 
-          {/* オプショナルボタン */}
-          <div className="mt-6 flex justify-center gap-3">
-            <Button
-              onClick={() => onNavigate('input')}
-              variant="optional"
-              buttonWidth="full"
-            >
-              入力に戻る
-            </Button>
-            <Button
-              onClick={previousImage}
-              variant="primary"
-              buttonWidth="full"
-            >
-              ひとつ戻る({results.length}個を選択済み)
-            </Button>
-          </div>
+        {/* オプショナルボタン */}
+        <div className="mt-6 flex justify-center gap-3">
+          <Button
+            onClick={() => onNavigate('input')}
+            variant="optional"
+            buttonWidth="full"
+          >
+            入力に戻る
+          </Button>
+          <Button onClick={previousImage} variant="primary" buttonWidth="full">
+            ひとつ戻る({results.length}個を選択済み)
+          </Button>
         </div>
       </div>
-    </div>
+    </ScreenWrapper>
   );
 }
