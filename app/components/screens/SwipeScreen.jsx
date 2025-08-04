@@ -152,7 +152,7 @@ export default function SwipeScreen({
     <ScreenWrapper>
       <TitleText mainText={'あなたの好きなバナーはあるかな？'} />
       {/* 選択した雰囲気 */}
-      <MoodDisplay selectedMoods={selectedMoods} />
+      <MoodDisplay selectedMoods={selectedMoods}/>
       {/* 進捗 */}
       <div className="mb-2 text-center">
         <p className="font-bold text-gray-600">

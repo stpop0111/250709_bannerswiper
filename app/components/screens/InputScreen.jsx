@@ -163,7 +163,7 @@ https://example.com/image1.jpg
 https://example.com/image2.jpg
 https://example.com/image3.jpg
       `}
-            className="max-h-[400px] min-h-[120px] w-full resize-none overflow-hidden border-none outline-none"
+            className="max-h-[400px] min-h-[120px] w-full resize-none overflow-y-auto border-none outline-none"
             onChange={(e) => setInputUrls(e.target.value)}
             onError={(e) => {
               e.target.src = '/test01.jpg';

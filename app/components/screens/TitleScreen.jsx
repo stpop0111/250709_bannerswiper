@@ -29,12 +29,12 @@ export default function TitleScreen({ onNavigate }) {
       </div>
 
       {/* ボタン */}
-      <div className="mt-6 w-full max-w-2xl">
+      <div className="mt-6 w-full">
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-          <Button onClick={() => onNavigate('input')} variant="primary">
+          <Button onClick={() => onNavigate('input')} variant="primary" buttonWidth='full'>
             デザインを探索する
           </Button>
-          <Button onClick={() => onNavigate('library')} variant="optional">
+          <Button onClick={() => onNavigate('library')} variant="optional" buttonWidth='full'>
             今までのスワイプを見る
           </Button>
         </div>
