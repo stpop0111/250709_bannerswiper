@@ -27,7 +27,7 @@ export const validateImages = async (urlArray, onProgress) => {
     results.push(result);
 
     if (onProgress) {
-      onProgress(i + 1, urlArray.length);
+      onProgress(i + 1, urlArray.length); // (current, total)として"InputScreen"に渡される
     }
   }
 
