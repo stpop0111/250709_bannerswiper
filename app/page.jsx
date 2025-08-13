@@ -29,14 +29,6 @@ export default function Home() {
     }
   };
 
-  // SwipeScreen.jsx -> 完了時の処理
-  // =======================================
-  const handleSwipeComplete = (swipeResults, moods) => {
-    setResults(swipeResults);
-    setSelectedMoods(moods);
-    changeScreen('result');
-  };
-
   // InputScreen.jsx -> URLの記入完了時
   // =======================================
   const handleInputComplete = (inputUrls, moods) => {
@@ -44,6 +36,14 @@ export default function Home() {
     setSelectedMoods(moods);
     setResults([]);
     changeScreen('swipe');
+  };
+
+  // SwipeScreen.jsx -> 完了時の処理
+  // =======================================
+  const handleSwipeComplete = (swipeResults, moods) => {
+    setResults(swipeResults);
+    setSelectedMoods(moods);
+    changeScreen('result');
   };
 
   // 雰囲気を削除する
