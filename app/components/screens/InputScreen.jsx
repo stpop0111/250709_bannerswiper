@@ -2,6 +2,9 @@ import { useState, useEffect, useRef } from 'react';
 import LoadingScreen from './LoadingScreen';
 import TitleText from '../common/TitleText';
 import Button from '../common/Button';
+import { FileIcon } from '../common/Icons';
+import { ImageIcon } from '../common/Icons';
+import { PlusIcon } from '../common/Icons';
 import ScreenWrapper from '../common/ScreenWrapper';
 import { validateImages, getValidImages } from '../../utils/imageValidar';
 import { moodOptions, axisLabels } from '../../data/options';
@@ -76,125 +79,162 @@ export default function InputScreen({ onNavigate, onComplete }) {
     }
   };
 
+  // モーダルの表示
+  // =======================================
+  const [openModal, setOpenModal] = useState(false);
+  const modalRef = useRef(null);
+
+  const handleModal = () => {
+    setOpenModal(!openModal);
+  };
+
+  useEffect(() => {
+    // modal以外のクリックでモーダルを閉じる
+    const handleClickOutside = (e) => {
+      if (!modalRef.current.contains(e.target)) {
+        setOpenModal(false);
+      }
+    };
+
+    // モーダルが開いている時 => HTMLすべてにクリックイベントを追加
+    if (openModal) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    // アンマウント時にイベントリスナーを削除
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [openModal]);
+
   if (isLoading) {
-    return (
-      <LoadingScreen
-        progress={loadingProgress}
-        currentCount={currentCount}
-        totalCount={totalCount}
-      />
-    );
+    return <LoadingScreen progress={loadingProgress} currentCount={currentCount} totalCount={totalCount} />;
   }
 
   return (
     <ScreenWrapper>
-        {/* タイトル */}
-        <TitleText mainText={'デザインを探索'} />
+      {/* タイトル */}
+      <TitleText mainText={'デザインを探索'} />
 
-        {/* 雰囲気選択 */}
-        <div className="mb-4">
-          <div className="rounded-lg border border-gray-400 bg-white p-4">
-            <h3 className="mb-4 text-lg font-bold">雰囲気を選択してください</h3>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-              <div>
-                {/* カテゴリー */}
-                <label className="mb-2 block text-sm font-semibold">
-                  {axisLabels.category}
-                </label>
-                <select
-                  value={selectMood.category}
-                  onChange={(e) => handleSelectMood('category', e.target.value)}
-                  className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
-                >
-                  <option value="">選択してください</option>
-                  {moodOptions.category.map((option) => (
-                    <option key={option.id} value={option.id}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                {/* テイスト */}
-                <label className="mb-2 block text-sm font-semibold">
-                  {axisLabels.taste}
-                </label>
-                <select
-                  value={selectMood.taste}
-                  onChange={(e) => handleSelectMood('taste', e.target.value)}
-                  className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
-                >
-                  <option value="">選択してください</option>
-                  {moodOptions.taste.map((option) => (
-                    <option key={option.id} value={option.id}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                {/* 色 */}
-                <label className="mb-2 block text-sm font-semibold">
-                  {axisLabels.color}
-                </label>
-                <select
-                  value={selectMood.color}
-                  onChange={(e) => handleSelectMood('color', e.target.value)}
-                  className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-600 focus:outline-none"
-                >
-                  <option value="">選択してください</option>
-                  {moodOptions.color.map((option) => (
-                    <option key={option.id} value={option.id}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
+      {/* 雰囲気選択 */}
+      <div className="mb-4">
+        <div className="rounded-lg border border-gray-400 bg-white p-4">
+          <h3 className="mb-4 text-lg font-bold">雰囲気を選択してください</h3>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <div>
+              {/* カテゴリー */}
+              <label className="mb-2 block text-sm font-semibold">{axisLabels.category}</label>
+              <select
+                value={selectMood.category}
+                onChange={(e) => handleSelectMood('category', e.target.value)}
+                className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-600 focus:outline-none">
+                <option value="">選択してください</option>
+                {moodOptions.category.map((option) => (
+                  <option key={option.id} value={option.id}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              {/* テイスト */}
+              <label className="mb-2 block text-sm font-semibold">{axisLabels.taste}</label>
+              <select
+                value={selectMood.taste}
+                onChange={(e) => handleSelectMood('taste', e.target.value)}
+                className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-600 focus:outline-none">
+                <option value="">選択してください</option>
+                {moodOptions.taste.map((option) => (
+                  <option key={option.id} value={option.id}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              {/* 色 */}
+              <label className="mb-2 block text-sm font-semibold">{axisLabels.color}</label>
+              <select
+                value={selectMood.color}
+                onChange={(e) => handleSelectMood('color', e.target.value)}
+                className="w-full rounded border border-gray-300 p-2 focus:ring-2 focus:ring-blue-600 focus:outline-none">
+                <option value="">選択してください</option>
+                {moodOptions.color.map((option) => (
+                  <option key={option.id} value={option.id}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
         </div>
+      </div>
 
-        {/* 入力エリア */}
-        <div className="mb-6 rounded-lg border border-gray-300 bg-white p-4">
-          <textarea
-            value={inputUrls}
-            placeholder={`画像URLを入力：
+      {/* 入力エリア */}
+      <div className="mb-6 rounded-lg border border-gray-300 bg-white p-4">
+        <textarea
+          value={inputUrls}
+          placeholder={`画像URLを入力：
 https://example.com/image1.jpg
 https://example.com/image2.jpg
 https://example.com/image3.jpg
       `}
-            className="max-h-[400px] min-h-[120px] w-full resize-none overflow-y-auto border-none outline-none"
-            onChange={(e) => setInputUrls(e.target.value)}
-            onError={(e) => {
-              e.target.src = '/test01.jpg';
-            }}
-            onInput={(e) => {
-              e.target.style.height = 'auto';
-              e.target.style.height = `${e.target.scrollHeight}px`;
-            }}
-          />
+          className="max-h-[400px] min-h-[120px] w-full resize-none overflow-y-auto border-none outline-none"
+          onChange={(e) => setInputUrls(e.target.value)}
+          onError={(e) => {
+            e.target.src = '/test01.jpg';
+          }}
+          onInput={(e) => {
+            e.target.style.height = 'auto';
+            e.target.style.height = `${e.target.scrollHeight}px`;
+          }}
+        />
 
-          {/* ボタン */}
-          <div className="flex w-full items-end justify-between">
-            <button className="h-8 w-8 rounded-lg border-1 border-gray-600">
-              +
+        {/* ボタン */}
+        <div className="flex w-full items-end justify-between">
+          <div className="relative" ref={modalRef}>
+            <button
+              className={`h-8 w-8 p-1 rounded-lg border-1 border-slate-300 text-slate-800 hover:bg-slate-100 transition-colors ease-in ${openModal ? 'bg-slate-100' : ''} `}
+              onClick={handleModal}>
+              <div className={`transition-all duration-200 ${openModal ? 'rotate-45' : 'rotate-0'}`}>
+                <PlusIcon />
+              </div>
             </button>
-            <Button onClick={handleUrlSubmit} variant="primary">
-              スワイプ開始！
-            </Button>
-          </div>
-        </div>
 
-        {/* タイトルに戻るボタン */}
-        <div className="w-full">
-          <Button
-            onClick={() => onNavigate('title')}
-            variant="optional"
-            buttonWidth="full"
-          >
-            タイトルに戻る
+            {/* モーダルウィンドウの表示 */}
+            {openModal && (
+              <div className="absolute z-10 mt-2 rounded-lg border-1 border-slate-300 bg-white shadow-lg">
+                <div className="p-1">
+                  <ul className="flex min-w-max flex-col items-start">
+                    <li className="w-full">
+                      <button className="w-full p-2 text-sm flex gap-2 whitespace-nowrap cursor-pointer hover:bg-slate-100 transition-colors ease-in rounded-sm">
+                        <FileIcon />
+                        CSVでインポート
+                      </button>
+                    </li>
+                    <li className="w-full">
+                      <button className="w-full p-2 text-sm flex gap-2 whitespace-nowrap cursor-pointer hover:bg-slate-100 transition-colors ease-in rounded-sm">
+                        <ImageIcon />
+                        画像ファイルでインポート
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            )}
+          </div>
+          <Button onClick={handleUrlSubmit} variant="primary">
+            スワイプ開始！
           </Button>
         </div>
+      </div>
+
+      {/* タイトルに戻るボタン */}
+      <div className="w-full">
+        <Button onClick={() => onNavigate('title')} variant="optional" buttonWidth="full">
+          タイトルに戻る
+        </Button>
+      </div>
     </ScreenWrapper>
   );
 }
