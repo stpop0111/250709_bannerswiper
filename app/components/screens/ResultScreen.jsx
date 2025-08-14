@@ -7,13 +7,7 @@ import ScreenWrapper from '../common/ScreenWrapper';
 import gsap from 'gsap';
 import { useState, useEffect, useRef } from 'react';
 
-export default function ResultScreen({
-  results,
-  images,
-  onNavigate,
-  selectedMoods,
-  onDeleteMood,
-}) {
+export default function ResultScreen({ results, images, onNavigate, selectedMoods, onDeleteMood }) {
   const [saveSession, setSaveSession] = useState(false); // 保存ダイアログ
   const [sessionName, setSessionName] = useState(''); // セッション名の保存
   const [imageStates, setImageStates] = useState({});
@@ -77,6 +71,8 @@ export default function ResultScreen({
     setSaveSession(false);
   };
 
+  const hasSelectedMood = selectedMoods && (selectedMoods.category || selectedMoods.taste || selectedMoods.color);
+
   // セッションの保存
   // =======================================
   // 初期の名前（保存日）
@@ -96,9 +92,7 @@ export default function ResultScreen({
   const saveToLocalStorage = (sessionData) => {
     try {
       // 既存のセッションを取得
-      const existingSessions = JSON.parse(
-        localStorage.getItem('bannerSessions') || '[]'
-      );
+      const existingSessions = JSON.parse(localStorage.getItem('bannerSessions') || '[]');
       // 既存のセッションに新規のセッションを追加
       const updatedSessions = [...existingSessions, sessionData];
       // ローカルストレージにセッションを保存
@@ -136,10 +130,7 @@ export default function ResultScreen({
     return (
       <ScreenWrapper>
         {/* タイトル */}
-        <TitleText
-          mainText={'選んだバナーがありません'}
-          subText={'あれ？全部イマイチだったかな？'}
-        />
+        <TitleText mainText={'選んだバナーがありません'} subText={'あれ？全部イマイチだったかな？'} />
         {/* ボタン */}
         <div className="m-auto mt-6 max-w-2xl">
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
@@ -161,53 +152,34 @@ export default function ResultScreen({
       {saveSession && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           {/* 背景 */}
-          <div
-            className="absolute inset-0 h-full w-screen bg-black opacity-50"
-            onClick={closeModal}
-          ></div>
+          <div className="absolute inset-0 h-full w-screen bg-black opacity-50" onClick={closeModal}></div>
 
           {/* モーダル */}
-          <div
-            className="relative z-10 mx-4 w-full max-w-xl rounded-lg bg-white p-5"
-            ref={elRef}
-          >
-            <div className="mb-4 rounded-lg border p-2">
-              <h3 className="text-lg font-bold">セッション名を保存</h3>
+          <div className="relative z-10 mx-4 w-full max-w-xl rounded-lg bg-white p-5" ref={elRef}>
+            <div className="mb-4">
+              <h3 className="text-lg font-bold mb-2">セッション名を保存</h3>
               {/* 名前入力欄 */}
               <input
                 type="text"
                 value={sessionName}
                 onChange={(e) => setSessionName(e.target.value)}
-                className="w-full resize-none overflow-hidden border-none p-2 outline-none"
+                className="w-full resize-none overflow-hidden p-2 outline-none border-1 rounded-lg"
                 placeholder="あなたの素敵なアイディアを保存しよう"
               />
-              <div className="rounded-sm border-1 bg-slate-50 p-2">
-                <h3 className="mb-2 text-sm font-bold">
-                  このセッションの雰囲気
-                </h3>
-                <MoodDisplay
-                  selectedMoods={selectedMoods}
-                  onDeleteMoodType={onDeleteMood}
-                />
-              </div>
+              {hasSelectedMood && (
+                <div className="rounded-sm border-1 bg-slate-50 p-2">
+                  <h3 className="mb-2 text-sm font-bold">このセッションの雰囲気</h3>
+                  <MoodDisplay selectedMoods={selectedMoods} onDeleteMoodType={onDeleteMood} />
+                </div>
+              )}
             </div>
 
             {/* ボタン */}
             <div className="flex gap-2">
-              <Button
-                onClick={closeModal}
-                variant="optional"
-                animation={false}
-                buttonWidth="full"
-              >
+              <Button onClick={closeModal} variant="optional" animation={false} buttonWidth="full">
                 キャンセル
               </Button>
-              <Button
-                onClick={handleSave}
-                variant="primary"
-                animation={false}
-                buttonWidth="full"
-              >
+              <Button onClick={handleSave} variant="primary" animation={false} buttonWidth="full">
                 保存
               </Button>
             </div>
@@ -217,17 +189,11 @@ export default function ResultScreen({
 
       <ScreenWrapper>
         {/* タイトル */}
-        <TitleText
-          mainText={'選んだバナー'}
-          subText={'あなたの素晴らしいデザインセンスです'}
-        />
+        <TitleText mainText={'選んだバナー'} subText={'あなたの素晴らしいデザインセンスです'} />
         {/* 雰囲気表示 */}
         <div className="mb-6">
           <div className="mx-auto w-fit">
-            <MoodDisplay
-              selectedMoods={selectedMoods}
-              onDeleteMoodType={onDeleteMood}
-            />
+            <MoodDisplay selectedMoods={selectedMoods} onDeleteMoodType={onDeleteMood} />
           </div>
         </div>
 

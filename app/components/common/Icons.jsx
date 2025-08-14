@@ -35,7 +35,7 @@ export function FileIcon() {
 export function PlusIcon() {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" className="h-full min-h-4 w-full min-w-4" viewBox="0 0 24 24" fill="none">
-      <path d="M6 12H18M12 6V18" stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M6 12H18M12 6V18" stroke="#222222" strokeWidth="2"/>
     </svg>
   );
 }

@@ -190,7 +190,7 @@ export default function SwipeScreen({
         <div className="text-center">
           <p className="text-lg">
             {imageWidth}×{imageHeight}
-            <p className="text-sm">
+            <span className="text-sm">
               (縦横比：
               {imageWidth / imageHeight === 1 ? (
                 <span className="text-green-500">正方形</span>
@@ -204,7 +204,7 @@ export default function SwipeScreen({
                 </span>
               )}
               )
-            </p>
+            </span>
           </p>
         </div>
       </div>

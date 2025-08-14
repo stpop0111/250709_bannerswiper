@@ -99,9 +99,7 @@ export default function LibraryScreen({ onNavigate }) {
   // 削除関数
   const handleDelete = () => {
     try {
-      const updatedSessions = savedSessions.filter(
-        (session) => session.id !== deleteSession.id
-      );
+      const updatedSessions = savedSessions.filter((session) => session.id !== deleteSession.id);
       localStorage.setItem('bannerSessions', JSON.stringify(updatedSessions));
       closeModal();
       setSavedSessions(updatedSessions);
@@ -125,22 +123,18 @@ export default function LibraryScreen({ onNavigate }) {
     loadSavedSessions();
   }, []);
 
+  const editResults = () => {};
+
   return (
     <ScreenWrapper>
-      {/* モーダルウィンドウの表示 */}
+      {/* 削除モーダルウィンドウの表示 */}
       {deleteSession && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           {/* 背景 */}
-          <div
-            className="absolute inset-0 h-full w-screen bg-black opacity-50"
-            onClick={closeModal}
-          ></div>
+          <div className="absolute inset-0 h-full w-screen bg-black opacity-50" onClick={closeModal}></div>
 
           {/* モーダル */}
-          <div
-            className="relative z-10 mx-4 w-full max-w-md rounded-lg bg-white p-5"
-            ref={elRef}
-          >
+          <div className="relative z-10 mx-4 w-full max-w-md rounded-lg bg-white p-5" ref={elRef}>
             <div className="mb-4 rounded-lg border p-2">
               <h3 className="text-lg font-bold">セッションを削除しますか？</h3>
               <p>セッション名：{deleteSession.name}</p>
@@ -148,20 +142,10 @@ export default function LibraryScreen({ onNavigate }) {
 
             {/* ボタン */}
             <div className="flex gap-2">
-              <Button
-                onClick={closeModal}
-                variant="optional"
-                animation={false}
-                buttonWidth="full"
-              >
+              <Button onClick={closeModal} variant="optional" animation={false} buttonWidth="full">
                 キャンセル
               </Button>
-              <Button
-                onClick={handleDelete}
-                variant="dislike"
-                animation={false}
-                buttonWidth="full"
-              >
+              <Button onClick={handleDelete} variant="dislike" animation={false} buttonWidth="full">
                 削除
               </Button>
             </div>
@@ -181,10 +165,7 @@ export default function LibraryScreen({ onNavigate }) {
           />
           <div className="mb-4">
             <div className="mx-auto w-fit">
-              <MoodDisplay
-                selectedMoods={selectedSession.selectedMoods}
-                readOnly={true}
-              />
+              <MoodDisplay selectedMoods={selectedSession.selectedMoods} readOnly={true} />
             </div>
           </div>
 
@@ -216,7 +197,7 @@ export default function LibraryScreen({ onNavigate }) {
                       <div className="w-full border-t-1 border-t-slate-200 bg-white py-2 text-center">
                         <p className="text-lg">
                           {imageState.width}×{imageState.height}
-                          <p className="text-sm">
+                          <span className="text-sm">
                             (縦横比：
                             {imageState.width / imageState.height === 1 ? (
                               <span className="text-green-500">正方形</span>
@@ -230,7 +211,7 @@ export default function LibraryScreen({ onNavigate }) {
                               </span>
                             )}
                             )
-                          </p>
+                          </span>
                         </p>
                       </div>
                     </div>
@@ -241,39 +222,33 @@ export default function LibraryScreen({ onNavigate }) {
 
           {/* ボタン */}
           <div className="mx-auto mt-6 w-full">
-            <div className="">
-              <Button
-                onClick={backToList}
-                variant="optional"
-                buttonWidth="full"
-              >
+            <div className="flex gap-2">
+              <Button onClick={backToList} variant="optional" buttonWidth="full">
                 リストに戻る
+              </Button>
+              <Button onClick={editResults} variant="optional" buttonWidth="full">
+                編集する
               </Button>
             </div>
           </div>
         </>
       ) : (
         <>
+          {/* ライブラリー画面 */}
           {/* タイトル */}
-          <TitleText
-            mainText={'選んだバナー'}
-            subText={'あなたの素晴らしいデザインセンスです'}
-          />
+          <TitleText mainText={'選んだバナー'} subText={'あなたの素晴らしいデザインセンスです'} />
 
           {/* 一覧 */}
-          <div className="bg-white p-4">
+          <div className="p-6">
             {!savedSessions || savedSessions.length === 0 ? (
-              <p className="text-center text-gray-500">
-                まだ保存されたセッションがありません。
-              </p>
+              <p className="text-center text-gray-500">まだ保存されたセッションがありません。</p>
             ) : (
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div className="grid grid-cols-1 gap-4">
                 {savedSessions.map((session) => (
                   <div
                     key={session.id}
                     className="group relative cursor-pointer rounded-lg border border-slate-300 bg-slate-100 p-2 transition-all hover:border-slate-400 hover:bg-slate-50"
-                    onClick={() => selectSession(session)}
-                  >
+                    onClick={() => selectSession(session)}>
                     <h3 className="mb-2 text-lg font-bold">{session.name}</h3>
                     {/* タイトル */}
                     <p className="mb-2 text-sm text-gray-800">
@@ -281,10 +256,7 @@ export default function LibraryScreen({ onNavigate }) {
                       作成日：
                       {new Date(session.createdAt).toLocaleDateString()}
                     </p>
-                    <MoodDisplay
-                      selectedMoods={session.selectedMoods}
-                      readOnly={true}
-                    />
+                    <MoodDisplay selectedMoods={session.selectedMoods} readOnly={true} />
                     <div className="absolute -top-3 -left-3">
                       <CloseButton
                         onClick={(e) => openModal(e, session)}
@@ -309,11 +281,7 @@ export default function LibraryScreen({ onNavigate }) {
                 タイトルに戻る
               </Button>
             </div>
-            <Button
-              onClick={deleteAllSessions}
-              variant="dislike"
-              buttonWidth="full"
-            >
+            <Button onClick={deleteAllSessions} variant="dislike" buttonWidth="full">
               すべて削除する
             </Button>
           </div>
