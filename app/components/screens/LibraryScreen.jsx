@@ -5,7 +5,7 @@ import { CloseButton } from '../common/Icons';
 import ScreenWrapper from '../common/ScreenWrapper';
 import { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import clsx from 'clsx'
+import clsx from 'clsx';
 
 export default function LibraryScreen({ onNavigate }) {
   const [selectedSession, setSelectedSession] = useState(null); // 選択済みセッションの状態管理
@@ -15,10 +15,6 @@ export default function LibraryScreen({ onNavigate }) {
 
   const [mode, setMode] = useState('view');
   const [selectedImage, setSelectedImage] = useState('');
-
-  const deleteImage = () => {
-    setMode('delete');
-  };
 
   // 画像読み込み時の処理
   // =======================================
@@ -208,13 +204,12 @@ export default function LibraryScreen({ onNavigate }) {
                               // md:768px以上の設定
                               'md:opacity-0',
                               'md:scale-90',
-                              
+
                               // モバイル時の状態
                               'opacity-100',
                               'scale-100',
-                              'hover:opacity-100',
-                            )
-                            }
+                              'hover:opacity-100'
+                            )}
                           />
                         </div>
                         <img
@@ -255,15 +250,12 @@ export default function LibraryScreen({ onNavigate }) {
 
           {/* ボタン */}
           <div className="mx-auto mt-6 w-full">
-            <Button onClick={backToList} variant="optional" buttonWidth="full">
-              リストに戻る
-            </Button>
             <div className="flex gap-2 mt-4">
+              <Button onClick={backToList} variant="optional" buttonWidth="full">
+                リストに戻る
+              </Button>
               <Button onClick={editResults} variant="primary" buttonWidth="full">
                 追加する
-              </Button>
-              <Button onClick={deleteImage} variant="dislike" buttonWidth="full">
-                削除する
               </Button>
             </div>
           </div>
