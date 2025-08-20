@@ -225,7 +225,7 @@ export default function ResultScreen({ results, images, onNavigate, selectedMood
                     <div className="w-full border-t-1 border-t-slate-200 bg-white py-2 text-center">
                       <p className="text-lg">
                         {imageState.width}×{imageState.height}
-                        <p className="text-sm">
+                        <span className="text-sm">
                           (縦横比：
                           {imageState.width / imageState.height === 1 ? (
                             <span className="text-green-500">正方形</span>
@@ -239,7 +239,7 @@ export default function ResultScreen({ results, images, onNavigate, selectedMood
                             </span>
                           )}
                           )
-                        </p>
+                        </span>
                       </p>
                     </div>
                   </div>

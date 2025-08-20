@@ -14,6 +14,7 @@
     "format:jsx": "prettier --write \"**/*.{js,jsx}\""
   },
   "dependencies": {
+    "clsx": "^2.1.1",
     "gsap": "^3.13.0",
     "next": "^15.3.5",
     "react": "^19.1.1",
