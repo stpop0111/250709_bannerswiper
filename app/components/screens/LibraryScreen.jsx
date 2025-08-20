@@ -12,6 +12,9 @@ export default function LibraryScreen({ onNavigate }) {
   const [savedSessions, setSavedSessions] = useState([]); // セッション一覧の管理
   const [imageStates, setImageStates] = useState({});
 
+  const [mode, setMode] = useState('view');
+  const [selectedImage, setSelectedImage] = useState('');
+
   // 画像読み込み時の処理
   // =======================================
   const handleImageLoad = (e, index) => {
