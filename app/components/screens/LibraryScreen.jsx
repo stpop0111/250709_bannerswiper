@@ -12,9 +12,7 @@ export default function LibraryScreen({ onNavigate }) {
   const [deleteSession, setDeleteSession] = useState(null); // 選択したセッションの削除
   const [savedSessions, setSavedSessions] = useState([]); // セッション一覧の管理
   const [imageStates, setImageStates] = useState({});
-
-  const [mode, setMode] = useState('view');
-  const [selectedImage, setSelectedImage] = useState('');
+  const [deleteImage, setDeleteImage] = useState(null);
 
   // 画像読み込み時の処理
   // =======================================
@@ -63,8 +61,14 @@ export default function LibraryScreen({ onNavigate }) {
     }
   };
 
-  // モーダル表示
+  // モダールウィンドウ表示
   // =======================================
+  const openModal = (e, deleteSession) => {
+    e.stopPropagation();
+    setDeleteSession(deleteSession);
+  };
+
+  // モーダル表示アニメーション
   const elRef = useRef(null);
   useEffect(() => {
     const element = elRef.current;
@@ -90,14 +94,11 @@ export default function LibraryScreen({ onNavigate }) {
     };
   }, [deleteSession]);
 
-  // モダールウィンドウ表示
-  const openModal = (e, deleteSession) => {
-    e.stopPropagation();
-    setDeleteSession(deleteSession);
-  };
   // モダールウィンドウ非表示
+  // =======================================
   const closeModal = () => {
     setDeleteSession(null);
+    setDeleteImage(null);
   };
 
   // 削除関数
@@ -127,7 +128,39 @@ export default function LibraryScreen({ onNavigate }) {
     loadSavedSessions();
   }, []);
 
-  const editResults = () => {};
+  // 画像削除モーダルの表示
+  const openDeleteImageModal = (e, result) => {
+    e.stopPropagation();
+    setDeleteImage(result.image);
+  }
+
+  const handleDeleteImage = () => {
+    const selectImage = deleteImage
+    const newResults = selectedSession.results.filter(
+      (result) => result.image !== selectImage
+    );
+
+    setSelectedSession ({
+      ...selectedSession,
+      results: newResults
+    })
+
+  const updatedSessions = savedSessions.map((session) => 
+    session.id === selectedSession.id
+      ? { ...session, results: newResults }
+      : session
+  );
+  console.log('selectedSession.id:', selectedSession.id);
+console.log('savedSessions:', savedSessions);
+console.log('updatedSessions:', updatedSessions);
+
+    localStorage.setItem('bannerSessions', JSON.stringify(updatedSessions));
+
+    closeModal();
+  }
+
+  const editResults = () => {
+  }
 
   return (
     <ScreenWrapper>
@@ -173,10 +206,38 @@ export default function LibraryScreen({ onNavigate }) {
             </div>
           </div>
 
-          {/* 画像表示 */}
+          {/* 画像削除モーダル */}
+          {deleteImage && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center">
+              {/* 背景 */}
+              <div className="absolute inset-0 h-full w-screen bg-black opacity-50" onClick={closeModal}></div>
+
+              {/* モーダル */}
+              <div className="relative z-10 mx-4 w-full max-w-md rounded-lg bg-white p-5" ref={elRef}>
+                <div className="mb-4 rounded-lg border p-2">
+                  <h3 className="text-lg font-bold">選んだ画像をリストから削除しますか？</h3>
+                  
+                  <p>削除する画像</p>
+                  <img src={`${deleteImage}`} alt="" />
+                </div>
+                {/* ボタン */}
+                <div className="flex gap-2">
+                  <Button onClick={closeModal} variant="optional" animation={false} buttonWidth="full">
+                    キャンセル
+                  </Button>
+                  <Button onClick={handleDeleteImage} variant="dislike" animation={false} buttonWidth="full">
+                    削除
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
           <div className="mb-6 max-h-[600px] overflow-y-auto">
             <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
-              {selectedSession.results
+              {selectedSession.results.filter((result) => result.choice === 'like').length === 0 ? (
+                <div className="col-span-2 text-center">選んだ画像が一つもありません</div>
+              ) : (
+              selectedSession.results
                 .filter((result) => result.choice === 'like')
                 .map((result, index) => {
                   const imageState = imageStates[index] || {
@@ -184,13 +245,12 @@ export default function LibraryScreen({ onNavigate }) {
                     height: 0,
                     size: 'w-full',
                   };
-
                   return (
                     <div key={index} className="relative bg-white p-2 overflow-auto">
                       <div className="group flex aspect-square flex-col items-center justify-center p-2">
                         <div className="absolute top-3 left-3 z-20">
                           <CloseButton
-                            onClick={(e) => openModal(e, session)}
+                            onClick={(e) => openDeleteImageModal(e, result)}
                             addClass={clsx(
                               // 基本設定
                               'bg-white',
@@ -244,7 +304,7 @@ export default function LibraryScreen({ onNavigate }) {
                       </div>
                     </div>
                   );
-                })}
+                }))}
             </div>
           </div>
 
