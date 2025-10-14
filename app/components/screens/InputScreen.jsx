@@ -57,13 +57,14 @@ export default function InputScreen({ onNavigate, onComplete }) {
     setLoadingProgress(0);
 
     try {
-      const results = await validateImages(urlArray, (current, total) => {
+      const validateResults = await validateImages(urlArray, (current, total) => {
         setCurrentCount(current);
         setTotalCount(total);
         const progress = Math.round((current / total) * 100);
         setLoadingProgress(progress);
       });
-      const validImages = getValidImages(results);
+
+      const validImages = getValidImages(validateResults);
 
       if (validImages.length === 0) {
         alert('有効な画像がありませんでした');
@@ -72,7 +73,15 @@ export default function InputScreen({ onNavigate, onComplete }) {
       }
 
       setIsLoading(false);
-      onComplete(validImages, selectMood);
+
+      const results = validImages.map((image) => {
+        return {
+          image,
+          choice: null
+        }
+      })
+      onComplete(results, selectMood);
+
     } catch (error) {
       alert('ロード中にエラーが発生しました');
       setIsLoading(false);
