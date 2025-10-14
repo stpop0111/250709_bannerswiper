@@ -21,7 +21,6 @@ export default function LibraryScreen({ onNavigate }) {
     const height = e.target.naturalHeight;
     let size = 'w-full';
 
-    // aspectCalc関数を使わず、直接計算
     if (width / height > 1) {
       size = 'w-full'; // 横長
     } else {
@@ -132,35 +131,30 @@ export default function LibraryScreen({ onNavigate }) {
   const openDeleteImageModal = (e, result) => {
     e.stopPropagation();
     setDeleteImage(result.image);
-  }
+  };
 
   const handleDeleteImage = () => {
-    const selectImage = deleteImage
-    const newResults = selectedSession.results.filter(
-      (result) => result.image !== selectImage
+    const selectImage = deleteImage;
+    const newResults = selectedSession.results.filter((result) => result.image !== selectImage);
+
+    setSelectedSession({
+      ...selectedSession,
+      results: newResults,
+    });
+
+    console.log(newResults)
+
+    const updatedSessions = savedSessions.map((session) =>
+      session.id === selectedSession.id ? { ...session, results: newResults } : session
     );
 
-    setSelectedSession ({
-      ...selectedSession,
-      results: newResults
-    })
-
-  const updatedSessions = savedSessions.map((session) => 
-    session.id === selectedSession.id
-      ? { ...session, results: newResults }
-      : session
-  );
-  console.log('selectedSession.id:', selectedSession.id);
-console.log('savedSessions:', savedSessions);
-console.log('updatedSessions:', updatedSessions);
-
+    setSavedSessions(updatedSessions);
     localStorage.setItem('bannerSessions', JSON.stringify(updatedSessions));
 
     closeModal();
-  }
+  };
 
-  const editResults = () => {
-  }
+  const editResults = () => {};
 
   return (
     <ScreenWrapper>
@@ -216,7 +210,7 @@ console.log('updatedSessions:', updatedSessions);
               <div className="relative z-10 mx-4 w-full max-w-md rounded-lg bg-white p-5" ref={elRef}>
                 <div className="mb-4 rounded-lg border p-2">
                   <h3 className="text-lg font-bold">選んだ画像をリストから削除しますか？</h3>
-                  
+
                   <p>削除する画像</p>
                   <img src={`${deleteImage}`} alt="" />
                 </div>
@@ -237,74 +231,75 @@ console.log('updatedSessions:', updatedSessions);
               {selectedSession.results.filter((result) => result.choice === 'like').length === 0 ? (
                 <div className="col-span-2 text-center">選んだ画像が一つもありません</div>
               ) : (
-              selectedSession.results
-                .filter((result) => result.choice === 'like')
-                .map((result, index) => {
-                  const imageState = imageStates[index] || {
-                    width: 0,
-                    height: 0,
-                    size: 'w-full',
-                  };
-                  return (
-                    <div key={index} className="relative bg-white p-2 overflow-auto">
-                      <div className="group flex aspect-square flex-col items-center justify-center p-2">
-                        <div className="absolute top-3 left-3 z-20">
-                          <CloseButton
-                            onClick={(e) => openDeleteImageModal(e, result)}
-                            addClass={clsx(
-                              // 基本設定
-                              'bg-white',
-                              'transition-all',
-                              'duration-200',
+                selectedSession.results
+                  .filter((result) => result.choice === 'like')
+                  .map((result, index) => {
+                    const imageState = imageStates[index] || {
+                      width: 0,
+                      height: 0,
+                      size: 'w-full',
+                    };
+                    return (
+                      <div key={index} className="relative bg-white p-2 overflow-auto">
+                        <div className="group flex aspect-square flex-col items-center justify-center p-2">
+                          <div className="absolute top-3 left-3 z-20">
+                            <CloseButton
+                              onClick={(e) => openDeleteImageModal(e, result)}
+                              addClass={clsx(
+                                // 基本設定
+                                'bg-white',
+                                'transition-all',
+                                'duration-200',
 
-                              // カードにホバーしたときの表示
-                              'group-hover:opacity-50',
-                              'group-hover:scale-100',
+                                // カードにホバーしたときの表示
+                                'group-hover:opacity-50',
+                                'group-hover:scale-100',
 
-                              // md:768px以上の設定
-                              'md:opacity-0',
-                              'md:scale-90',
+                                // md:768px以上の設定
+                                'md:opacity-0',
+                                'md:scale-90',
 
-                              // モバイル時の状態
-                              'opacity-100',
-                              'scale-100',
-                              'hover:opacity-100'
-                            )}
+                                // モバイル時の状態
+                                'opacity-100',
+                                'scale-100',
+                                'hover:opacity-100'
+                              )}
+                            />
+                          </div>
+                          <img
+                            src={result.image}
+                            alt={`好きな画像 ${index + 1}`}
+                            className={`object-cover ${imageState.size} shadow-sm`}
+                            onLoad={(e) => handleImageLoad(e, index)}
+                            onError={(e) => {
+                              e.target.src = '/test01.jpg';
+                            }}
                           />
                         </div>
-                        <img
-                          src={result.image}
-                          alt={`好きな画像 ${index + 1}`}
-                          className={`object-cover ${imageState.size} shadow-sm`}
-                          onLoad={(e) => handleImageLoad(e, index)}
-                          onError={(e) => {
-                            e.target.src = '/test01.jpg';
-                          }}
-                        />
+                        <div className="w-full border-t-1 border-t-slate-200 bg-white py-2 text-center">
+                          <p className="text-lg">
+                            {imageState.width}×{imageState.height}
+                            <span className="text-sm">
+                              (縦横比：
+                              {imageState.width / imageState.height === 1 ? (
+                                <span className="text-green-500">正方形</span>
+                              ) : imageState.width / imageState.height > 1 ? (
+                                <span>
+                                  <span className="text-blue-500">横</span>型
+                                </span>
+                              ) : (
+                                <span>
+                                  <span className="text-red-500">縦</span>型
+                                </span>
+                              )}
+                              )
+                            </span>
+                          </p>
+                        </div>
                       </div>
-                      <div className="w-full border-t-1 border-t-slate-200 bg-white py-2 text-center">
-                        <p className="text-lg">
-                          {imageState.width}×{imageState.height}
-                          <span className="text-sm">
-                            (縦横比：
-                            {imageState.width / imageState.height === 1 ? (
-                              <span className="text-green-500">正方形</span>
-                            ) : imageState.width / imageState.height > 1 ? (
-                              <span>
-                                <span className="text-blue-500">横</span>型
-                              </span>
-                            ) : (
-                              <span>
-                                <span className="text-red-500">縦</span>型
-                              </span>
-                            )}
-                            )
-                          </span>
-                        </p>
-                      </div>
-                    </div>
-                  );
-                }))}
+                    );
+                  })
+              )}
             </div>
           </div>
 
